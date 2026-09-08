@@ -62,6 +62,7 @@ export const AreaMap: React.FC<AreaMapProps> = ({
   const [searchFocused, setSearchFocused] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const [mapMode, setMapMode] = useState<'vector' | 'satellite'>('vector');
 
   const query = externalSearchQuery !== undefined ? externalSearchQuery : internalSearch;
   const setQuery = externalOnSearchChange || setInternalSearch;
@@ -295,55 +296,84 @@ export const AreaMap: React.FC<AreaMapProps> = ({
 
       </div>
 
-      {/* 2. MAP CONTROLS CLUSTER (Zoom, Reset, Compass at top right) */}
-      <div className="absolute top-3 right-3 z-30 flex flex-col gap-1.5 items-end">
-        {/* Compass */}
-        <div className="w-8 h-8 rounded-[6px] bg-paper/90 backdrop-blur-xs border border-hairline shadow-sm flex items-center justify-center">
-          <Compass className="w-4 h-4 text-brass" />
-        </div>
+      {/* 2. MAP CONTROLS CLUSTER (Google Maps Switcher, Zoom, Reset, Compass at top right) */}
+      <div className="absolute top-3 right-3 z-30 flex flex-col gap-2 items-end">
+        {/* Map Mode Switcher Button */}
+        <button
+          onClick={() => setMapMode(mapMode === 'vector' ? 'satellite' : 'vector')}
+          className="px-3 py-1.5 rounded-[6px] bg-paper/95 backdrop-blur-md border border-hairline shadow-md text-xs font-mono font-semibold text-ink hover:bg-paper cursor-pointer flex items-center gap-1.5 transition-all"
+        >
+          <Navigation className="w-3.5 h-3.5 text-water" />
+          <span>{mapMode === 'vector' ? 'Google Maps View' : 'Vector Basin Map'}</span>
+        </button>
 
-        {/* Zoom In/Out & Reset */}
-        <div className="bg-paper/90 backdrop-blur-xs border border-hairline rounded-[6px] shadow-sm flex flex-col overflow-hidden text-ink">
-          <button
-            onClick={() => handleZoom(0.15)}
-            title="Zoom In"
-            className="p-1.5 hover:bg-canvas border-b border-hairline cursor-pointer"
-          >
-            <ZoomIn className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={() => handleZoom(-0.15)}
-            title="Zoom Out"
-            className="p-1.5 hover:bg-canvas border-b border-hairline cursor-pointer"
-          >
-            <ZoomOut className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={resetView}
-            title="Reset Map View"
-            className="p-1.5 hover:bg-canvas cursor-pointer text-muted hover:text-ink"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-          </button>
-        </div>
+        <div className="flex flex-col gap-1.5 items-end">
+          {/* Compass */}
+          <div className="w-8 h-8 rounded-[6px] bg-paper/90 backdrop-blur-xs border border-hairline shadow-sm flex items-center justify-center">
+            <Compass className="w-4 h-4 text-brass" />
+          </div>
 
-        {/* Live Count Indicator */}
-        <div className="bg-paper/90 backdrop-blur-xs border border-hairline rounded-[4px] px-2 py-0.5 text-[10px] font-mono text-muted shadow-xs">
-          {attractions.length} pins
+          {/* Zoom In/Out & Reset */}
+          {mapMode === 'vector' && (
+            <div className="bg-paper/90 backdrop-blur-xs border border-hairline rounded-[6px] shadow-sm flex flex-col overflow-hidden text-ink">
+              <button
+                onClick={() => handleZoom(0.15)}
+                title="Zoom In"
+                className="p-1.5 hover:bg-canvas border-b border-hairline cursor-pointer"
+              >
+                <ZoomIn className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => handleZoom(-0.15)}
+                title="Zoom Out"
+                className="p-1.5 hover:bg-canvas border-b border-hairline cursor-pointer"
+              >
+                <ZoomOut className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={resetView}
+                title="Reset Map View"
+                className="p-1.5 hover:bg-canvas cursor-pointer text-muted hover:text-ink"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
+
+          {/* Live Count Indicator */}
+          <div className="bg-paper/90 backdrop-blur-xs border border-hairline rounded-[4px] px-2 py-0.5 text-[10px] font-mono text-muted shadow-xs">
+            {attractions.length} pins
+          </div>
         </div>
       </div>
 
-      {/* 3. SVG MAP CANVAS WITH PAN & ZOOM */}
+      {/* 3. MAP CANVAS: Vector SVG vs Live Google Maps Iframe */}
       <div className="relative flex-1 w-full h-full overflow-hidden">
-        <svg
-          viewBox="0 0 800 600"
-          className="w-full h-full transition-transform duration-300 ease-out"
-          style={{
-            transform: `scale(${zoomLevel}) translate(${panOffset.x}px, ${panOffset.y}px)`,
-            transformOrigin: '50% 50%'
-          }}
-          aria-label="Map of Los Angeles and Burbank attractions"
-        >
+        {mapMode === 'satellite' ? (
+          <div className="absolute inset-0 w-full h-full bg-paper">
+            <iframe
+              title="Google Maps Satellite View of El Royale Hotel & Burbank"
+              src="https://maps.google.com/maps?q=3901+W+Riverside+Dr,+Burbank,+CA+91505&t=k&z=15&output=embed"
+              className="w-full h-full border-0 filter contrast-[1.05]"
+              allowFullScreen={true}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div className="absolute bottom-4 left-4 bg-shade/85 backdrop-blur-md text-white px-3 py-1.5 rounded-[4px] text-xs font-mono flex items-center gap-2 shadow-lg">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Google Maps Live Satellite · El Royale Hotel (3901 W Riverside Dr)</span>
+            </div>
+          </div>
+        ) : (
+          <svg
+            viewBox="0 0 800 600"
+            className="w-full h-full transition-transform duration-300 ease-out"
+            style={{
+              transform: `scale(${zoomLevel}) translate(${panOffset.x}px, ${panOffset.y}px)`,
+              transformOrigin: '50% 50%'
+            }}
+            aria-label="Map of Los Angeles and Burbank attractions"
+          >
           <defs>
             <linearGradient id="hill-grad" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#D9E3D6" />
@@ -597,6 +627,7 @@ export const AreaMap: React.FC<AreaMapProps> = ({
           </g>
 
         </svg>
+        )}
       </div>
 
       {/* 4. INTERACTIVE HOTEL LOCATION & RATING CARD OVERLAY */}
