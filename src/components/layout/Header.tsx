@@ -127,7 +127,7 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
 
         {/* Center: Desktop Navigation */}
         <nav
-          className="hidden lg:flex items-center space-x-5 xl:space-x-8 text-[14px] xl:text-[15px] font-medium"
+          className="hidden xl:flex items-center space-x-6 text-[14px] font-medium"
           aria-label="Main navigation"
         >
           <Link
@@ -231,7 +231,7 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
         </nav>
 
         {/* Right actions: Ambience Audio, Currency, Lang, User, Check availability */}
-        <div className="hidden lg:flex items-center space-x-2.5 xl:space-x-3.5 shrink-0">
+        <div className="hidden xl:flex items-center space-x-3 shrink-0">
           
           {/* Ambient Grounds Sound Generator Toggle */}
           <button
@@ -376,8 +376,8 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
           </button>
         </div>
 
-        {/* Mobile & Tablet Controls (Visible under lg / 1024px) */}
-        <div className="flex lg:hidden items-center space-x-2">
+        {/* Mobile & Tablet Controls (Visible under xl / 1280px) */}
+        <div className="flex xl:hidden items-center space-x-2">
           {/* Temp Pill */}
           <button
             onClick={toggleTempUnit}
@@ -421,7 +421,7 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="lg:hidden bg-paper/98 backdrop-blur-md border-b border-hairline px-6 py-6 space-y-4 shadow-2xl z-60 overflow-hidden"
+            className="xl:hidden bg-paper/98 backdrop-blur-md border-b border-hairline px-6 py-6 space-y-4 shadow-2xl z-60 overflow-hidden"
           >
             <div className="flex flex-col space-y-2.5 text-[15px] text-ink font-medium">
               <Link to="/stay" className="py-2 border-b border-hairline/60 hover:text-water transition-colors">
