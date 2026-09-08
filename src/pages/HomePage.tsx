@@ -391,23 +391,20 @@ export const HomePage: React.FC = () => {
 
             {/* Cropped Interactive Map Teaser */}
             <div className="lg:col-span-7 h-[360px] md:h-[420px] rounded-[10px] overflow-hidden border border-hairline shadow-sm relative group">
-              <ResortPlanSVG
-                villas={villasOnly}
-                selectedVillaId={null}
-                hoveredVillaId={null}
-                filteredVillaIds={villasOnly.map((v) => v.id)}
-                unavailableVillaIds={['villa-2']}
-                onSelectVilla={(v) => navigate(`/resort-map?unit=${v.id}`)}
-                onHoverVilla={() => {}}
-                zoomLevel={1.05}
-                panOffset={{ x: 0, y: 0 }}
+              <iframe
+                title="Google Maps Satellite Teaser - El Royale Hotel Burbank"
+                src="https://maps.google.com/maps?q=3901+W+Riverside+Dr,+Burbank,+CA+91505&t=k&z=17&output=embed"
+                className="w-full h-full border-0 filter contrast-[1.05]"
+                allowFullScreen={true}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
               />
               <Link
                 to="/resort-map"
                 className="absolute inset-0 bg-shade/0 group-hover:bg-shade/10 transition-colors flex items-end justify-end p-4"
               >
                 <span className="bg-paper/90 backdrop-blur-xs text-ink text-xs font-medium px-3 py-1.5 rounded-[2px] border border-hairline flex items-center gap-1 shadow-xs">
-                  <span>Open Full Interactive Plan</span>
+                  <span>Open Full Interactive Map</span>
                   <ChevronRight className="w-3.5 h-3.5 text-brass" />
                 </span>
               </Link>

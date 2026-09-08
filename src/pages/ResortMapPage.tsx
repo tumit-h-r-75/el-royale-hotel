@@ -45,6 +45,7 @@ export const ResortMapPage: React.FC = () => {
   // Map view and layer toggles
   const [blueprintMode, setBlueprintMode] = useState<boolean>(false);
   const [highlightPlungePools, setHighlightPlungePools] = useState<boolean>(false);
+  const [mapViewMode, setMapViewMode] = useState<'roadmap' | 'satellite'>('satellite');
 
   // Filters
   const [bedrooms, setBedrooms] = useState<string>(searchParams.get('bedrooms') || 'all');
@@ -237,49 +238,23 @@ export const ResortMapPage: React.FC = () => {
             
             {/* Map Canvas */}
             <div className="flex-1 relative overflow-hidden">
-              <ResortPlanSVG
-                villas={villas}
-                selectedVillaId={selectedVilla?.id || null}
-                hoveredVillaId={hoveredVillaId}
-                filteredVillaIds={filteredVillaIds}
-                unavailableVillaIds={unavailableVillaIds}
-                onSelectVilla={handleSelectVilla}
-                onHoverVilla={setHoveredVillaId}
-                zoomLevel={zoomLevel}
-                panOffset={panOffset}
-                blueprintMode={blueprintMode}
-                highlightPlungePools={highlightPlungePools}
-                currencySymbol={currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'CAD' ? 'CA$' : currency === 'JPY' ? '¥' : '$'}
+              <iframe
+                title="Google Maps Satellite View - El Royale Hotel Burbank"
+                src={`https://maps.google.com/maps?q=3901+W+Riverside+Dr,+Burbank,+CA+91505&t=${mapViewMode === 'satellite' ? 'k' : 'm'}&z=17&output=embed`}
+                className="w-full h-full border-0 filter contrast-[1.05]"
+                allowFullScreen={true}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
               />
 
-              {/* Map Layer Toggles & Mode Switchers (Top-Right) */}
+              {/* Map View Mode Switcher (Top-Right) */}
               <div className="absolute top-4 right-4 flex items-center space-x-2 z-20">
-                {/* Plunge Pool Highlight Toggle */}
                 <button
-                  onClick={() => setHighlightPlungePools(!highlightPlungePools)}
-                  className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-[4px] text-xs font-medium border backdrop-blur-xs shadow-xs transition-all cursor-pointer ${
-                    highlightPlungePools
-                      ? 'bg-water text-white border-water ring-2 ring-water/20'
-                      : 'bg-paper/90 text-ink border-hairline hover:bg-paper'
-                  }`}
-                  title="Toggle highlight on plunge pool villas"
+                  onClick={() => setMapViewMode(mapViewMode === 'satellite' ? 'roadmap' : 'satellite')}
+                  className="flex items-center space-x-1.5 px-3 py-1.5 rounded-[4px] text-xs font-mono font-semibold bg-paper/95 text-ink border border-hairline shadow-md hover:bg-paper cursor-pointer transition-all"
                 >
-                  <Droplets className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Highlight Pools</span>
-                </button>
-
-                {/* Blueprint View Switcher */}
-                <button
-                  onClick={() => setBlueprintMode(!blueprintMode)}
-                  className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-[4px] text-xs font-medium border backdrop-blur-xs shadow-xs transition-all cursor-pointer ${
-                    blueprintMode
-                      ? 'bg-[#15232D] text-sky-400 border-sky-500/50 ring-2 ring-sky-500/20'
-                      : 'bg-paper/90 text-ink border-hairline hover:bg-paper'
-                  }`}
-                  title="Switch between garden aerial and architectural blueprint view"
-                >
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>{blueprintMode ? 'Blueprint' : 'Garden Plan'}</span>
+                  <Layers className="w-3.5 h-3.5 text-water" />
+                  <span>{mapViewMode === 'satellite' ? 'Satellite View' : 'Roadmap View'}</span>
                 </button>
               </div>
 
