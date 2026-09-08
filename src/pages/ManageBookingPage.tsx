@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { mockStays } from '../data/mockStays';
@@ -21,7 +22,7 @@ import {
 
 export const ManageBookingPage: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const { state } = useBooking();
+  const { state, formatMoney } = useBooking();
 
   const codeParam = searchParams.get('code') || '';
   const emailParam = searchParams.get('email') || '';
@@ -267,15 +268,15 @@ export const ManageBookingPage: React.FC = () => {
                           >
                             <div className="space-y-0.5">
                               <span className="font-medium text-ink block">{addon.name}</span>
-                              <span className="font-mono text-muted text-[11px]">${addon.price} {addon.basis === 'per night' ? '/ night' : 'flat'}</span>
+                              <span className="font-mono text-muted text-[11px]">{formatMoney(addon.price)} {addon.basis === 'per night' ? '/ night' : 'flat'}</span>
                             </div>
                             <button
                               onClick={() => handleAddAddon(addon.name)}
                               disabled={isAdded}
-                              className={`px-3 py-1.5 rounded-[2px] font-mono transition-colors ${
+                              className={`px-3 py-1.5 rounded-[2px] font-mono transition-colors cursor-pointer ${
                                 isAdded
                                   ? 'bg-emerald-100 text-emerald-800'
-                                  : 'bg-paper border border-hairline text-ink hover:border-brass cursor-pointer'
+                                  : 'bg-paper border border-hairline text-ink hover:border-brass'
                               }`}
                             >
                               {isAdded ? 'Added to Folio' : '+ Add'}
@@ -316,7 +317,7 @@ export const ManageBookingPage: React.FC = () => {
                   <div className="space-y-2 text-xs font-mono border-b border-hairline pb-4">
                     <div className="flex justify-between text-muted">
                       <span>Room Subtotal ({activeStay.nights} nights)</span>
-                      <span className="text-ink">${Math.round(activeStay.totalPrice * 0.86)}</span>
+                      <span className="text-ink">{formatMoney(Math.round(activeStay.totalPrice * 0.86))}</span>
                     </div>
                     {addedAddons.map((ad, idx) => (
                       <div key={idx} className="flex justify-between text-muted">
@@ -326,18 +327,18 @@ export const ManageBookingPage: React.FC = () => {
                     ))}
                     <div className="flex justify-between text-muted">
                       <span>Taxes & lodging fee (14%)</span>
-                      <span className="text-ink">${Math.round(activeStay.totalPrice * 0.14)}</span>
+                      <span className="text-ink">{formatMoney(Math.round(activeStay.totalPrice * 0.14))}</span>
                     </div>
                     <div className="pt-2 border-t border-hairline flex justify-between text-sm font-semibold">
                       <span className="font-sans text-ink">Total Rate</span>
-                      <span className="text-ink">${activeStay.totalPrice}</span>
+                      <span className="text-ink">{formatMoney(activeStay.totalPrice)}</span>
                     </div>
                   </div>
 
                   <div className="space-y-2 pt-2">
                     <button
                       onClick={() => window.print()}
-                      className="w-full bg-canvas border border-hairline hover:border-brass text-ink py-2.5 rounded-[2px] text-xs font-mono flex items-center justify-center space-x-2"
+                      className="w-full bg-canvas border border-hairline hover:border-brass text-ink py-2.5 rounded-[2px] text-xs font-mono flex items-center justify-center space-x-2 cursor-pointer"
                     >
                       <Printer className="w-3.5 h-3.5 text-muted" />
                       <span>Print Folio Receipt</span>
@@ -369,33 +370,48 @@ export const ManageBookingPage: React.FC = () => {
         </section>
 
         {/* Cancellation Confirmation Modal */}
-        {cancelModalOpen && (
-          <div className="fixed inset-0 z-50 bg-shade/60 backdrop-blur-xs flex items-center justify-center p-6 animate-in fade-in">
-            <div className="bg-paper border border-hairline rounded-[10px] p-6 max-w-md w-full space-y-4 shadow-xl text-center">
-              <div className="w-10 h-10 bg-rose-100 text-rose-800 rounded-full flex items-center justify-center mx-auto">
-                <XCircle className="w-5 h-5" />
-              </div>
-              <h3 className="font-serif text-2xl text-ink">Cancel this Reservation?</h3>
-              <p className="text-xs text-muted leading-relaxed">
-                Are you sure you want to cancel reservation <strong>{activeStay.confirmationCode}</strong> for {activeStay.roomName}? This action will release your dates back to our inventory.
-              </p>
-              <div className="flex space-x-3 pt-2">
-                <button
-                  onClick={handleCancelReservation}
-                  className="flex-1 bg-rose-800 text-white py-2.5 rounded-[2px] text-xs font-medium cursor-pointer hover:bg-rose-900"
-                >
-                  Yes, Cancel Reservation
-                </button>
-                <button
-                  onClick={() => setCancelModalOpen(false)}
-                  className="flex-1 bg-canvas border border-hairline text-ink py-2.5 rounded-[2px] text-xs font-medium cursor-pointer"
-                >
-                  Keep Reservation
-                </button>
-              </div>
+        <AnimatePresence>
+          {cancelModalOpen && (
+            <div className="fixed inset-0 z-70 flex items-center justify-center p-6">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setCancelModalOpen(false)}
+                className="fixed inset-0 bg-shade/60 backdrop-blur-xs"
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                transition={{ duration: 0.2 }}
+                className="relative z-10 bg-paper border border-hairline rounded-[10px] p-6 max-w-md w-full space-y-4 shadow-2xl text-center"
+              >
+                <div className="w-10 h-10 bg-rose-100 text-rose-800 rounded-full flex items-center justify-center mx-auto">
+                  <XCircle className="w-5 h-5" />
+                </div>
+                <h3 className="font-serif text-2xl text-ink">Cancel this Reservation?</h3>
+                <p className="text-xs text-muted leading-relaxed">
+                  Are you sure you want to cancel reservation <strong>{activeStay.confirmationCode}</strong> for {activeStay.roomName}? This action will release your dates back to our inventory.
+                </p>
+                <div className="flex space-x-3 pt-2">
+                  <button
+                    onClick={handleCancelReservation}
+                    className="flex-1 bg-rose-800 text-white py-2.5 rounded-[2px] text-xs font-medium cursor-pointer hover:bg-rose-900"
+                  >
+                    Yes, Cancel Reservation
+                  </button>
+                  <button
+                    onClick={() => setCancelModalOpen(false)}
+                    className="flex-1 bg-canvas border border-hairline text-ink py-2.5 rounded-[2px] text-xs font-medium cursor-pointer hover:bg-hairline/50"
+                  >
+                    Keep Reservation
+                  </button>
+                </div>
+              </motion.div>
             </div>
-          </div>
-        )}
+          )}
+        </AnimatePresence>
 
       </main>
 

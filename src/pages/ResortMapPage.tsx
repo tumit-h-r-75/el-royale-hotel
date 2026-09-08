@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { accommodations } from '../data/rooms';
@@ -20,13 +21,16 @@ import {
   Sparkles,
   ArrowRight,
   Info,
-  Check
+  Check,
+  Compass,
+  Droplets,
+  Layers
 } from 'lucide-react';
 
 export const ResortMapPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { state, setDates, setGuests, selectUnit } = useBooking();
+  const { state, setDates, setGuests, selectUnit, formatMoney, currency } = useBooking();
 
   // Filter villas only (sellMode === 'byUnit')
   const villas = useMemo(() => accommodations.filter((a) => a.sellMode === 'byUnit'), []);
@@ -37,6 +41,10 @@ export const ResortMapPage: React.FC = () => {
     villas.find((v) => v.id === unitParam) || null
   );
   const [hoveredVillaId, setHoveredVillaId] = useState<string | null>(null);
+
+  // Map view and layer toggles
+  const [blueprintMode, setBlueprintMode] = useState<boolean>(false);
+  const [highlightPlungePools, setHighlightPlungePools] = useState<boolean>(false);
 
   // Filters
   const [bedrooms, setBedrooms] = useState<string>(searchParams.get('bedrooms') || 'all');
@@ -239,7 +247,41 @@ export const ResortMapPage: React.FC = () => {
                 onHoverVilla={setHoveredVillaId}
                 zoomLevel={zoomLevel}
                 panOffset={panOffset}
+                blueprintMode={blueprintMode}
+                highlightPlungePools={highlightPlungePools}
+                currencySymbol={currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'CAD' ? 'CA$' : currency === 'JPY' ? '¥' : '$'}
               />
+
+              {/* Map Layer Toggles & Mode Switchers (Top-Right) */}
+              <div className="absolute top-4 right-4 flex items-center space-x-2 z-20">
+                {/* Plunge Pool Highlight Toggle */}
+                <button
+                  onClick={() => setHighlightPlungePools(!highlightPlungePools)}
+                  className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-[4px] text-xs font-medium border backdrop-blur-xs shadow-xs transition-all cursor-pointer ${
+                    highlightPlungePools
+                      ? 'bg-water text-white border-water ring-2 ring-water/20'
+                      : 'bg-paper/90 text-ink border-hairline hover:bg-paper'
+                  }`}
+                  title="Toggle highlight on plunge pool villas"
+                >
+                  <Droplets className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Highlight Pools</span>
+                </button>
+
+                {/* Blueprint View Switcher */}
+                <button
+                  onClick={() => setBlueprintMode(!blueprintMode)}
+                  className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-[4px] text-xs font-medium border backdrop-blur-xs shadow-xs transition-all cursor-pointer ${
+                    blueprintMode
+                      ? 'bg-[#15232D] text-sky-400 border-sky-500/50 ring-2 ring-sky-500/20'
+                      : 'bg-paper/90 text-ink border-hairline hover:bg-paper'
+                  }`}
+                  title="Switch between garden aerial and architectural blueprint view"
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>{blueprintMode ? 'Blueprint' : 'Garden Plan'}</span>
+                </button>
+              </div>
 
               {/* Zoom & Pan Controls (+/-, reset) in top-left */}
               <div className="absolute top-4 left-4 bg-paper/90 backdrop-blur-xs border border-hairline rounded-[4px] p-1 flex flex-col space-y-1 shadow-xs z-20">
@@ -372,7 +414,7 @@ export const ResortMapPage: React.FC = () => {
                             {villa.name}
                           </h3>
                           <span className="text-xs font-mono font-semibold text-ink">
-                            ${villa.basePrice}<span className="text-[10px] text-muted font-normal">/nt</span>
+                            {formatMoney(villa.basePrice)}<span className="text-[10px] text-muted font-normal">/nt</span>
                           </span>
                         </div>
                         <p className="text-[11px] text-muted uppercase font-mono mt-0.5 truncate">
@@ -395,7 +437,7 @@ export const ResortMapPage: React.FC = () => {
                         </span>
                       ) : (
                         <span className="text-[11px] font-mono text-muted">
-                          ${baseTotal} total ({totalNights} nights)
+                          {formatMoney(baseTotal)} total ({totalNights} nights)
                         </span>
                       )}
                       <span className="text-water font-medium flex items-center gap-1 group-hover:underline">
@@ -413,13 +455,15 @@ export const ResortMapPage: React.FC = () => {
         </div>
       </main>
 
-      {/* Slide-in Villa Detail Drawer when villa is selected */}
-      {selectedVilla && (
-        <VillaDetailDrawer
-          villa={selectedVilla}
-          onClose={() => setSelectedVilla(null)}
-        />
-      )}
+      {/* Slide-in Villa Detail Drawer when villa is selected with AnimatePresence */}
+      <AnimatePresence>
+        {selectedVilla && (
+          <VillaDetailDrawer
+            villa={selectedVilla}
+            onClose={() => setSelectedVilla(null)}
+          />
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Users, Tag, ChevronDown, X, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useBooking } from '../../context/BookingContext';
 import { getLowestRateTonight } from '../../data/rates';
 
@@ -9,7 +10,7 @@ interface AvailabilityBarProps {
 }
 
 export const AvailabilityBar: React.FC<AvailabilityBarProps> = ({ isSticky = false }) => {
-  const { state, setDates, setGuests, setPromoCode } = useBooking();
+  const { state, setDates, setGuests, setPromoCode, formatMoney } = useBooking();
   const navigate = useNavigate();
 
   const [guestPickerOpen, setGuestPickerOpen] = useState(false);
@@ -81,7 +82,7 @@ export const AvailabilityBar: React.FC<AvailabilityBarProps> = ({ isSticky = fal
             </span>
             <div className="text-[13px] leading-tight">
               <span className="text-muted block text-[11px]">Best Available</span>
-              <span className="font-mono font-medium text-ink">From ${lowestTonight} tonight</span>
+              <span className="font-mono font-medium text-ink">From {formatMoney(lowestTonight)} tonight</span>
             </div>
           </div>
 
@@ -135,18 +136,25 @@ export const AvailabilityBar: React.FC<AvailabilityBarProps> = ({ isSticky = fal
               </button>
 
               {/* Guest Picker Popover */}
-              {guestPickerOpen && (
-                <div className="absolute top-full left-0 mt-2 w-72 bg-paper border border-hairline rounded-[10px] shadow-lg p-4 z-50 animate-in fade-in zoom-in-95">
-                  <div className="flex items-center justify-between pb-3 border-b border-hairline">
-                    <span className="text-sm font-medium text-ink">Guests & Rooms</span>
-                    <button
-                      onClick={() => setGuestPickerOpen(false)}
-                      className="text-muted hover:text-ink p-1"
-                      aria-label="Close guests picker"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
+              <AnimatePresence>
+                {guestPickerOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full left-0 mt-2 w-72 bg-paper border border-hairline rounded-[10px] shadow-xl p-4 z-60"
+                  >
+                    <div className="flex items-center justify-between pb-3 border-b border-hairline">
+                      <span className="text-sm font-medium text-ink">Guests & Rooms</span>
+                      <button
+                        onClick={() => setGuestPickerOpen(false)}
+                        className="text-muted hover:text-ink p-1 cursor-pointer"
+                        aria-label="Close guests picker"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
 
                   {/* Adults */}
                   <div className="flex items-center justify-between py-3 border-b border-hairline/60">
@@ -243,13 +251,14 @@ export const AvailabilityBar: React.FC<AvailabilityBarProps> = ({ isSticky = fal
 
                   <button
                     onClick={() => setGuestPickerOpen(false)}
-                    className="w-full mt-3 bg-canvas border border-hairline py-1.5 text-xs font-medium rounded-[2px] hover:bg-hairline/40 text-ink"
+                    className="w-full mt-3 bg-canvas border border-hairline py-1.5 text-xs font-medium rounded-[2px] hover:bg-hairline/40 text-ink cursor-pointer"
                   >
                     Apply guests
                   </button>
-                </div>
+                </motion.div>
               )}
-            </div>
+            </AnimatePresence>
+          </div>
 
             {/* Promo Code Toggle */}
             <div className="relative flex items-center">
@@ -331,120 +340,137 @@ export const AvailabilityBar: React.FC<AvailabilityBarProps> = ({ isSticky = fal
       </div>
 
       {/* Mobile Full-Screen Date & Guest Picker Modal */}
-      {mobileModalOpen && (
-        <div className="fixed inset-0 z-50 bg-shade/70 backdrop-blur-xs flex flex-col justify-end md:hidden animate-in fade-in">
-          <div className="bg-paper rounded-t-[14px] p-6 max-h-[90vh] overflow-y-auto space-y-5 animate-in slide-in-from-bottom">
-            <div className="flex items-center justify-between border-b border-hairline pb-4">
-              <div>
-                <h3 className="font-serif text-xl text-ink">Select Stay Dates</h3>
-                <p className="text-xs text-muted font-mono">From ${lowestTonight} tonight</p>
-              </div>
-              <button
-                onClick={() => setMobileModalOpen(false)}
-                className="p-1 text-muted hover:text-ink rounded-[2px]"
-                aria-label="Close modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Dates */}
-            <div className="space-y-3">
-              <div>
-                <label className="text-xs uppercase tracking-wider text-muted block mb-1">Check-in Date</label>
-                <input
-                  type="date"
-                  value={state.checkIn}
-                  onChange={(e) => handleDateChange('checkIn', e.target.value)}
-                  className="w-full bg-canvas border border-hairline rounded-[2px] p-2.5 font-mono text-sm"
-                />
-              </div>
-              <div>
-                <label className="text-xs uppercase tracking-wider text-muted block mb-1">Check-out Date</label>
-                <input
-                  type="date"
-                  value={state.checkOut}
-                  onChange={(e) => handleDateChange('checkOut', e.target.value)}
-                  className="w-full bg-canvas border border-hairline rounded-[2px] p-2.5 font-mono text-sm"
-                />
-              </div>
-            </div>
-
-            {/* Guests */}
-            <div className="space-y-3 pt-2 border-t border-hairline">
-              <span className="text-xs uppercase tracking-wider text-muted block">Guests</span>
-              
-              <div className="flex items-center justify-between py-1">
-                <div>
-                  <span className="text-sm font-medium text-ink block">Adults</span>
-                  <span className="text-xs text-muted">Ages 13+</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <button
-                    onClick={() => handleGuestChange('adults', -1)}
-                    disabled={state.adults <= 1}
-                    className="w-8 h-8 rounded-[2px] border border-hairline flex items-center justify-center font-mono disabled:opacity-30"
-                  >
-                    -
-                  </button>
-                  <span className="font-mono text-sm w-4 text-center">{state.adults}</span>
-                  <button
-                    onClick={() => handleGuestChange('adults', 1)}
-                    disabled={state.adults >= 8}
-                    className="w-8 h-8 rounded-[2px] border border-hairline flex items-center justify-center font-mono disabled:opacity-30"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between py-1">
-                <div>
-                  <span className="text-sm font-medium text-ink block">Children</span>
-                  <span className="text-xs text-muted">Ages 0 to 12</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <button
-                    onClick={() => handleGuestChange('children', -1)}
-                    disabled={state.children <= 0}
-                    className="w-8 h-8 rounded-[2px] border border-hairline flex items-center justify-center font-mono disabled:opacity-30"
-                  >
-                    -
-                  </button>
-                  <span className="font-mono text-sm w-4 text-center">{state.children}</span>
-                  <button
-                    onClick={() => handleGuestChange('children', 1)}
-                    disabled={state.children >= 4}
-                    className="w-8 h-8 rounded-[2px] border border-hairline flex items-center justify-center font-mono disabled:opacity-30"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Promo code */}
-            <div className="pt-2 border-t border-hairline">
-              <label className="text-xs uppercase tracking-wider text-muted block mb-1">Promo or Corporate Code</label>
-              <input
-                type="text"
-                placeholder="e.g. RESIDENT or STUDIO"
-                value={state.promoCode || ''}
-                onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                className="w-full bg-canvas border border-hairline rounded-[2px] p-2 font-mono text-xs uppercase"
-              />
-            </div>
-
-            {/* Submit */}
-            <button
-              onClick={handleSearch}
-              className="w-full bg-water text-white py-3.5 rounded-[2px] font-medium text-sm tracking-wide shadow-xs mt-4"
+      <AnimatePresence>
+        {mobileModalOpen && (
+          <div className="fixed inset-0 z-70 flex flex-col justify-end md:hidden">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setMobileModalOpen(false)}
+              className="fixed inset-0 bg-shade/70 backdrop-blur-xs"
+            />
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+              className="relative z-10 bg-paper rounded-t-[14px] p-6 max-h-[90vh] overflow-y-auto space-y-5 shadow-2xl"
             >
-              Search available accommodation
-            </button>
+              <div className="flex items-center justify-between border-b border-hairline pb-4">
+                <div>
+                  <h3 className="font-serif text-xl text-ink">Select Stay Dates</h3>
+                  <p className="text-xs text-muted font-mono">From {formatMoney(lowestTonight)} tonight</p>
+                </div>
+                <button
+                  onClick={() => setMobileModalOpen(false)}
+                  className="p-1 text-muted hover:text-ink rounded-[2px] cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Dates */}
+              <div className="space-y-3">
+                <div>
+                  <label className="text-xs uppercase tracking-wider text-muted block mb-1">Check-in Date</label>
+                  <input
+                    type="date"
+                    value={state.checkIn}
+                    onChange={(e) => handleDateChange('checkIn', e.target.value)}
+                    className="w-full bg-canvas border border-hairline rounded-[2px] p-2.5 font-mono text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs uppercase tracking-wider text-muted block mb-1">Check-out Date</label>
+                  <input
+                    type="date"
+                    value={state.checkOut}
+                    onChange={(e) => handleDateChange('checkOut', e.target.value)}
+                    className="w-full bg-canvas border border-hairline rounded-[2px] p-2.5 font-mono text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Guests */}
+              <div className="space-y-3 pt-2 border-t border-hairline">
+                <span className="text-xs uppercase tracking-wider text-muted block">Guests</span>
+                
+                <div className="flex items-center justify-between py-1">
+                  <div>
+                    <span className="text-sm font-medium text-ink block">Adults</span>
+                    <span className="text-xs text-muted">Ages 13+</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => handleGuestChange('adults', -1)}
+                      disabled={state.adults <= 1}
+                      className="w-8 h-8 rounded-[2px] border border-hairline flex items-center justify-center font-mono disabled:opacity-30 cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="font-mono text-sm w-4 text-center">{state.adults}</span>
+                    <button
+                      onClick={() => handleGuestChange('adults', 1)}
+                      disabled={state.adults >= 8}
+                      className="w-8 h-8 rounded-[2px] border border-hairline flex items-center justify-center font-mono disabled:opacity-30 cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between py-1">
+                  <div>
+                    <span className="text-sm font-medium text-ink block">Children</span>
+                    <span className="text-xs text-muted">Ages 0 to 12</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => handleGuestChange('children', -1)}
+                      disabled={state.children <= 0}
+                      className="w-8 h-8 rounded-[2px] border border-hairline flex items-center justify-center font-mono disabled:opacity-30 cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="font-mono text-sm w-4 text-center">{state.children}</span>
+                    <button
+                      onClick={() => handleGuestChange('children', 1)}
+                      disabled={state.children >= 4}
+                      className="w-8 h-8 rounded-[2px] border border-hairline flex items-center justify-center font-mono disabled:opacity-30 cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Promo code */}
+              <div className="pt-2 border-t border-hairline">
+                <label className="text-xs uppercase tracking-wider text-muted block mb-1">Promo or Corporate Code</label>
+                <input
+                  type="text"
+                  placeholder="e.g. RESIDENT or STUDIO"
+                  value={state.promoCode || ''}
+                  onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                  className="w-full bg-canvas border border-hairline rounded-[2px] p-2 font-mono text-xs uppercase"
+                />
+              </div>
+
+              {/* Submit */}
+              <button
+                onClick={handleSearch}
+                className="w-full bg-water text-white py-3.5 rounded-[2px] font-medium text-sm tracking-wide shadow-xs mt-4 cursor-pointer"
+              >
+                Search available accommodation
+              </button>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 };

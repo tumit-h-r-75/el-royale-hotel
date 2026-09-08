@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { accommodations } from '../data/rooms';
@@ -24,7 +25,7 @@ import {
 export const StayDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { state, setDates, setGuests, selectUnit } = useBooking();
+  const { state, setDates, setGuests, selectUnit, formatMoney } = useBooking();
 
   const unit = accommodations.find((a) => a.slug === slug) || accommodations[0];
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -125,41 +126,61 @@ export const StayDetailPage: React.FC = () => {
         </section>
 
         {/* Lightbox Modal */}
-        {lightboxOpen && (
-          <div className="fixed inset-0 z-50 bg-black/95 flex flex-col justify-between p-6 animate-in fade-in">
-            <div className="flex justify-between items-center text-white text-xs font-mono">
-              <span>{unit.name} · Image {activeImageIndex + 1} of {unit.gallery.length}</span>
-              <button
-                onClick={() => setLightboxOpen(false)}
-                className="p-2 text-white hover:text-brass"
-                aria-label="Close image lightbox"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="flex-1 flex items-center justify-center p-4">
-              <img
-                src={unit.gallery[activeImageIndex]}
-                alt={unit.name}
-                className="max-h-[82vh] max-w-[90vw] object-contain rounded-[4px]"
-              />
-            </div>
-            <div className="flex justify-center space-x-4">
-              <button
-                onClick={() => setActiveImageIndex((prev) => (prev > 0 ? prev - 1 : unit.gallery.length - 1))}
-                className="px-4 py-2 bg-white/10 text-white rounded-[2px] hover:bg-white/20 text-xs font-mono"
-              >
-                ← Previous
-              </button>
-              <button
-                onClick={() => setActiveImageIndex((prev) => (prev < unit.gallery.length - 1 ? prev + 1 : 0))}
-                className="px-4 py-2 bg-white/10 text-white rounded-[2px] hover:bg-white/20 text-xs font-mono"
-              >
-                Next →
-              </button>
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {lightboxOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-70 bg-black/95 flex flex-col justify-between p-4 md:p-6"
+            >
+              <div className="flex justify-between items-center text-white text-xs font-mono max-w-7xl mx-auto w-full">
+                <span>{unit.name} · Image {activeImageIndex + 1} of {unit.gallery.length}</span>
+                <button
+                  onClick={() => setLightboxOpen(false)}
+                  className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors cursor-pointer"
+                  aria-label="Close image lightbox"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="relative flex-1 flex items-center justify-center p-2 md:p-4">
+                <button
+                  onClick={() => setActiveImageIndex((prev) => (prev > 0 ? prev - 1 : unit.gallery.length - 1))}
+                  className="absolute left-2 md:left-6 z-10 p-3 bg-black/40 hover:bg-black/80 text-white rounded-full backdrop-blur-xs transition-colors cursor-pointer border border-white/10"
+                  aria-label="Previous photo"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+
+                <motion.img
+                  key={activeImageIndex}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  src={unit.gallery[activeImageIndex]}
+                  alt={unit.name}
+                  className="max-h-[80vh] max-w-[85vw] object-contain rounded-[4px] shadow-2xl"
+                />
+
+                <button
+                  onClick={() => setActiveImageIndex((prev) => (prev < unit.gallery.length - 1 ? prev + 1 : 0))}
+                  className="absolute right-2 md:right-6 z-10 p-3 bg-black/40 hover:bg-black/80 text-white rounded-full backdrop-blur-xs transition-colors cursor-pointer border border-white/10"
+                  aria-label="Next photo"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="flex justify-center space-x-4 pb-2">
+                <span className="text-white/60 text-xs font-mono">
+                  Use arrows or tap thumbnail strip below when closed
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Main Content Layout: Left Details + Right Sticky Booking Panel */}
         <div className="max-w-[1240px] mx-auto px-6 md:px-8 py-10">
@@ -369,7 +390,7 @@ export const StayDetailPage: React.FC = () => {
                 <div className="border-b border-hairline pb-4 flex items-baseline justify-between">
                   <div>
                     <span className="text-xs text-muted block font-sans">Starting from</span>
-                    <span className="font-mono text-3xl font-semibold text-ink">${unit.basePrice}</span>
+                    <span className="font-mono text-3xl font-semibold text-ink">{formatMoney(unit.basePrice)}</span>
                     <span className="text-xs text-muted font-mono"> / night</span>
                   </div>
                   {unit.sellMode === 'byUnit' && (
@@ -412,13 +433,13 @@ export const StayDetailPage: React.FC = () => {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => setGuests(Math.max(1, state.adults - 1), state.children)}
-                        className="w-6 h-6 rounded-[2px] border border-hairline flex items-center justify-center font-mono"
+                        className="w-6 h-6 rounded-[2px] border border-hairline flex items-center justify-center font-mono cursor-pointer"
                       >
                         -
                       </button>
                       <button
                         onClick={() => setGuests(Math.min(unit.sleeps, state.adults + 1), state.children)}
-                        className="w-6 h-6 rounded-[2px] border border-hairline flex items-center justify-center font-mono"
+                        className="w-6 h-6 rounded-[2px] border border-hairline flex items-center justify-center font-mono cursor-pointer"
                       >
                         +
                       </button>
@@ -430,12 +451,12 @@ export const StayDetailPage: React.FC = () => {
                 {available ? (
                   <div className="pt-4 border-t border-hairline space-y-2 text-xs font-mono">
                     <div className="flex justify-between text-muted">
-                      <span>${Math.round(baseTotal / totalNights)} × {totalNights} nights</span>
-                      <span className="text-ink">${baseTotal}</span>
+                      <span>{formatMoney(Math.round(baseTotal / totalNights))} × {totalNights} nights</span>
+                      <span className="text-ink">{formatMoney(baseTotal)}</span>
                     </div>
                     <div className="flex justify-between text-muted">
                       <span>Taxes & lodging assessments (14%)</span>
-                      <span className="text-ink">${taxesAndFees}</span>
+                      <span className="text-ink">{formatMoney(taxesAndFees)}</span>
                     </div>
                     <div className="flex justify-between text-muted">
                       <span>Resort fee</span>
@@ -443,7 +464,7 @@ export const StayDetailPage: React.FC = () => {
                     </div>
                     <div className="pt-2 border-t border-hairline flex items-baseline justify-between text-sm">
                       <span className="font-sans font-medium text-ink">Total Due</span>
-                      <span className="font-semibold text-lg text-ink">${grandTotal}</span>
+                      <span className="font-semibold text-lg text-ink">{formatMoney(grandTotal)}</span>
                     </div>
                   </div>
                 ) : (
@@ -494,7 +515,7 @@ export const StayDetailPage: React.FC = () => {
                   <div className="pt-3 space-y-1">
                     <span className="text-[11px] font-mono text-muted uppercase tracking-wider">{rel.floorZone}</span>
                     <h4 className="font-serif text-lg text-ink font-medium">{rel.name}</h4>
-                    <p className="text-xs font-mono text-muted">Sleeps {rel.sleeps} · From ${rel.basePrice}/night</p>
+                    <p className="text-xs font-mono text-muted">Sleeps {rel.sleeps} · From {formatMoney(rel.basePrice)}/night</p>
                   </div>
                 </Link>
               ))}
@@ -505,16 +526,16 @@ export const StayDetailPage: React.FC = () => {
       </main>
 
       {/* Mobile Fixed Bottom Booking Bar */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-paper border-t border-hairline p-4 shadow-lg flex items-center justify-between">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-paper/95 backdrop-blur-md border-t border-hairline p-4 shadow-lg flex items-center justify-between">
         <div>
           <span className="text-[11px] text-muted block">From</span>
-          <span className="font-mono text-lg font-semibold text-ink">${unit.basePrice}</span>
+          <span className="font-mono text-lg font-semibold text-ink">{formatMoney(unit.basePrice)}</span>
           <span className="text-[11px] text-muted font-mono"> / night</span>
         </div>
         <button
           onClick={handleReserve}
           disabled={!available}
-          className="bg-water text-white text-xs px-6 py-3 rounded-[2px] font-medium"
+          className="bg-water text-white text-xs px-6 py-3 rounded-[2px] font-medium cursor-pointer"
         >
           {available ? 'Reserve Now' : 'Unavailable'}
         </button>

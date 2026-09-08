@@ -11,6 +11,9 @@ interface ResortPlanSVGProps {
   onHoverVilla: (villaId: string | null) => void;
   zoomLevel: number;
   panOffset: { x: number; y: number };
+  blueprintMode?: boolean;
+  highlightPlungePools?: boolean;
+  currencySymbol?: string;
 }
 
 export const ResortPlanSVG: React.FC<ResortPlanSVGProps> = ({
@@ -22,10 +25,15 @@ export const ResortPlanSVG: React.FC<ResortPlanSVGProps> = ({
   onSelectVilla,
   onHoverVilla,
   zoomLevel,
-  panOffset
+  panOffset,
+  blueprintMode = false,
+  highlightPlungePools = false,
+  currencySymbol = '$'
 }) => {
   return (
-    <div className="relative w-full h-full bg-[#E5ECE4] overflow-hidden select-none">
+    <div className={`relative w-full h-full overflow-hidden select-none transition-colors duration-300 ${
+      blueprintMode ? 'bg-[#15232D]' : 'bg-[#E5ECE4]'
+    }`}>
       <svg
         viewBox="0 0 1000 650"
         className="w-full h-full transition-transform duration-100 ease-out cursor-grab active:cursor-grabbing"
@@ -38,22 +46,27 @@ export const ResortPlanSVG: React.FC<ResortPlanSVGProps> = ({
         <defs>
           {/* Subtle garden foliage patterns */}
           <pattern id="citrus-orchard" width="40" height="40" patternUnits="userSpaceOnUse">
-            <circle cx="20" cy="20" r="14" fill="#D2DDD0" opacity="0.6" />
-            <circle cx="20" cy="20" r="3" fill="#A8842C" opacity="0.4" />
+            <circle cx="20" cy="20" r="14" fill={blueprintMode ? '#1C2F3D' : '#D2DDD0'} opacity="0.6" />
+            <circle cx="20" cy="20" r="3" fill={blueprintMode ? '#38BDF8' : '#A8842C'} opacity="0.4" />
           </pattern>
           <pattern id="olive-grove" width="30" height="30" patternUnits="userSpaceOnUse">
-            <circle cx="15" cy="15" r="10" fill="#CBD6C9" opacity="0.7" />
-            <circle cx="15" cy="15" r="2" fill="#5C6660" opacity="0.4" />
+            <circle cx="15" cy="15" r="10" fill={blueprintMode ? '#1A2C38' : '#CBD6C9'} opacity="0.7" />
+            <circle cx="15" cy="15" r="2" fill={blueprintMode ? '#64748B' : '#5C6660'} opacity="0.4" />
           </pattern>
           {/* Water reflection */}
           <linearGradient id="pool-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#14657E" stopOpacity="0.85" />
             <stop offset="100%" stopColor="#0E4C5F" stopOpacity="0.95" />
           </linearGradient>
+          {/* Blueprint grid */}
+          <pattern id="blueprint-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#253E52" strokeWidth="0.75" />
+          </pattern>
         </defs>
 
         {/* Base Ground Texture */}
-        <rect x="0" y="0" width="1000" height="650" fill="#E2EAE0" />
+        <rect x="0" y="0" width="1000" height="650" fill={blueprintMode ? '#15232D' : '#E2EAE0'} />
+        {blueprintMode && <rect x="0" y="0" width="1000" height="650" fill="url(#blueprint-grid)" opacity="0.8" />}
 
         {/* Landscaping Zones (Shade #14261F tints) */}
         {/* North Orchard Grove */}
@@ -403,6 +416,21 @@ export const ResortPlanSVG: React.FC<ResortPlanSVGProps> = ({
                 }
               }}
             >
+              {/* Plunge Pool highlight ring when toggled */}
+              {highlightPlungePools && villa.amenities.some(a => a.toLowerCase().includes('pool')) && (
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="26"
+                  fill="none"
+                  stroke="#38BDF8"
+                  strokeWidth="2"
+                  strokeDasharray="4 3"
+                  className="animate-spin origin-center"
+                  style={{ animationDuration: '8s' }}
+                />
+              )}
+
               {/* Outer halo when selected or hovered */}
               {(isSelected || isHovered) && (
                 <circle
@@ -421,7 +449,7 @@ export const ResortPlanSVG: React.FC<ResortPlanSVGProps> = ({
                 cy="0"
                 r="15"
                 fill={markerFill}
-                stroke="#FFFFFF"
+                stroke={blueprintMode ? '#38BDF8' : '#FFFFFF'}
                 strokeWidth="2.5"
                 className="shadow-sm"
               />
@@ -443,9 +471,9 @@ export const ResortPlanSVG: React.FC<ResortPlanSVGProps> = ({
               {(isHovered || isSelected) && (
                 <g transform="translate(0, -26)">
                   <rect
-                    x="-65"
+                    x="-70"
                     y="-20"
-                    width="130"
+                    width="140"
                     height="22"
                     rx="2"
                     fill="#14261F"
@@ -461,7 +489,7 @@ export const ResortPlanSVG: React.FC<ResortPlanSVGProps> = ({
                     fontWeight="500"
                     textAnchor="middle"
                   >
-                    {villa.name} · ${villa.basePrice}/nt
+                    {villa.name} · {currencySymbol}{villa.basePrice}/nt
                   </text>
                 </g>
               )}

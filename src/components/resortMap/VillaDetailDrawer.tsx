@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { X, Users, Bed, Square, Eye, Sparkles, Check, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Accommodation } from '../../types/hotel';
 import { useBooking } from '../../context/BookingContext';
 import { checkStayAvailability } from '../../data/rates';
@@ -11,7 +12,7 @@ interface VillaDetailDrawerProps {
 }
 
 export const VillaDetailDrawer: React.FC<VillaDetailDrawerProps> = ({ villa, onClose }) => {
-  const { state, selectUnit } = useBooking();
+  const { state, selectUnit, formatMoney } = useBooking();
   const navigate = useNavigate();
 
   if (!villa) return null;
@@ -28,9 +29,26 @@ export const VillaDetailDrawer: React.FC<VillaDetailDrawerProps> = ({ villa, onC
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-shade/40 backdrop-blur-xs animate-in fade-in">
-      <div className="w-full max-w-[480px] bg-paper h-full shadow-2xl overflow-y-auto flex flex-col border-l border-hairline animate-in slide-in-from-right duration-300">
-        
+    <div className="fixed inset-0 z-60 flex justify-end">
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        onClick={onClose}
+        className="fixed inset-0 bg-shade/50 backdrop-blur-xs"
+        aria-hidden="true"
+      />
+
+      {/* Slide-over panel */}
+      <motion.div
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+        className="relative w-full max-w-[480px] bg-paper h-full shadow-2xl overflow-y-auto flex flex-col border-l border-hairline z-10"
+      >
         {/* Header */}
         <div className="sticky top-0 bg-paper/95 backdrop-blur-xs z-10 px-6 py-4 border-b border-hairline flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -40,7 +58,7 @@ export const VillaDetailDrawer: React.FC<VillaDetailDrawerProps> = ({ villa, onC
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-[2px] text-muted hover:text-ink hover:bg-canvas transition-colors"
+            className="p-1.5 rounded-[2px] text-muted hover:text-ink hover:bg-canvas transition-colors cursor-pointer"
             aria-label="Close villa detail"
           >
             <X className="w-5 h-5" />
@@ -48,7 +66,6 @@ export const VillaDetailDrawer: React.FC<VillaDetailDrawerProps> = ({ villa, onC
         </div>
 
         <div className="p-6 space-y-6 flex-1">
-          
           {/* 3-Image Gallery */}
           <div className="grid grid-cols-3 gap-2">
             <div className="col-span-3 h-52 rounded-[6px] overflow-hidden">
@@ -124,8 +141,8 @@ export const VillaDetailDrawer: React.FC<VillaDetailDrawerProps> = ({ villa, onC
             <div className="flex items-baseline justify-between pt-1">
               <span className="text-sm font-medium text-ink">Total Rate (Excl. taxes)</span>
               <div className="text-right">
-                <span className="font-mono text-2xl font-semibold text-ink">${baseTotal}</span>
-                <span className="text-[11px] text-muted block font-mono">avg. ${Math.round(baseTotal / totalNights)}/night</span>
+                <span className="font-mono text-2xl font-semibold text-ink">{formatMoney(baseTotal)}</span>
+                <span className="text-[11px] text-muted block font-mono">avg. {formatMoney(Math.round(baseTotal / totalNights))}/night</span>
               </div>
             </div>
 
@@ -160,7 +177,7 @@ export const VillaDetailDrawer: React.FC<VillaDetailDrawerProps> = ({ villa, onC
           </div>
         </div>
 
-      </div>
+      </motion.div>
     </div>
   );
 };

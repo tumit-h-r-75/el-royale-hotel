@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <radialGradient id="tangerineGlow" cx="42%" cy="38%" r="60%">
+      <stop offset="0%" stop-color="#FF9E4A" />
+      <stop offset="65%" stop-color="#E26A20" />
+      <stop offset="100%" stop-color="#B84806" />
+    </radialGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6B8E5E" />
+      <stop offset="100%" stop-color="#365038" />
+    </linearGradient>
+    <linearGradient id="brassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C5A46A" />
+      <stop offset="100%" stop-color="#8A6B3D" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background subtle mineral disk -->
+  <circle cx="32" cy="32" r="30" fill="#F2F4F1" stroke="#8A6B3D" stroke-width="1.5" stroke-opacity="0.35" />
+
+  <!-- Tangerine main body -->
+  <circle cx="32" cy="36" r="20" fill="url(#tangerineGlow)" />
+  
+  <!-- Subtle surface dimple highlight -->
+  <ellipse cx="28" cy="27" rx="3.5" ry="1.5" fill="#FFE0B2" fill-opacity="0.45" />
+
+  <!-- Botanical Stem -->
+  <path d="M32 20 C32 15, 36 13, 39 10" fill="none" stroke="url(#brassGrad)" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Olive Leaf -->
+  <path d="M34 18 C40 14, 48 15, 52 20 C47 24, 38 23, 34 18 Z" fill="url(#leafGrad)" />
+  
+  <!-- Leaf vein -->
+  <path d="M35 18 C41 18, 47 19, 50 20" fill="none" stroke="#A7C399" stroke-width="0.8" stroke-linecap="round" />
+
+  <!-- Small citrus flower blossom bud in brass/cream -->
+  <circle cx="27" cy="18" r="2.2" fill="#FAF6EE" stroke="#8A6B3D" stroke-width="0.8" />
+</svg>

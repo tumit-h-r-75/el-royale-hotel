@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { useBooking } from '../context/BookingContext';
@@ -37,7 +38,8 @@ export const BookingPage: React.FC = () => {
     updateGuestInfo,
     confirmReservation,
     extendHoldTimer,
-    resetBooking
+    resetBooking,
+    formatMoney
   } = useBooking();
 
   // Active Checkout Step: 1 (Accommodations) | 2 (Rate Plan) | 3 (Add-ons) | 4 (Guest Info) | 5 (Review & Pay) | 6 (Confirmed)
@@ -221,9 +223,9 @@ export const BookingPage: React.FC = () => {
                     <div className="pt-3 border-t border-hairline flex items-baseline justify-between">
                       <div>
                         <span className="text-[10px] text-muted uppercase block font-sans">Avg. Nightly</span>
-                        <span className="font-mono text-xl font-semibold text-ink">${acc.basePrice}</span>
+                        <span className="font-mono text-xl font-semibold text-ink">{formatMoney(acc.basePrice)}</span>
                       </div>
-                      <button className="bg-water text-white text-xs px-4 py-2 rounded-[2px] font-medium">
+                      <button className="bg-water text-white text-xs px-4 py-2 rounded-[2px] font-medium cursor-pointer">
                         Select
                       </button>
                     </div>
@@ -239,7 +241,7 @@ export const BookingPage: React.FC = () => {
               <div className="lg:col-span-8 space-y-6">
                 <button
                   onClick={() => setCurrentStep(1)}
-                  className="text-xs text-muted hover:text-ink flex items-center gap-1 underline font-mono"
+                  className="text-xs text-muted hover:text-ink flex items-center gap-1 underline font-mono cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" /> Back to accommodations
                 </button>
@@ -296,8 +298,8 @@ export const BookingPage: React.FC = () => {
 
                           <div className="text-right shrink-0 border-t sm:border-t-0 pt-3 sm:pt-0">
                             <span className="text-xs text-muted block font-sans">Avg. per night</span>
-                            <span className="font-mono text-2xl font-semibold text-ink">${planNightly}</span>
-                            <span className="text-xs text-muted block font-mono mt-0.5">${planTotal} stay total</span>
+                            <span className="font-mono text-2xl font-semibold text-ink">{formatMoney(planNightly)}</span>
+                            <span className="text-xs text-muted block font-mono mt-0.5">{formatMoney(planTotal)} stay total</span>
 
                             <button
                               onClick={(e) => {
@@ -340,7 +342,7 @@ export const BookingPage: React.FC = () => {
               <div className="lg:col-span-8 space-y-6">
                 <button
                   onClick={() => setCurrentStep(2)}
-                  className="text-xs text-muted hover:text-ink flex items-center gap-1 underline font-mono"
+                  className="text-xs text-muted hover:text-ink flex items-center gap-1 underline font-mono cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" /> Back to rate plans
                 </button>
@@ -377,13 +379,13 @@ export const BookingPage: React.FC = () => {
                           </div>
                           <p className="text-xs text-ink/75 leading-relaxed">{addon.description}</p>
                           <span className="text-[11px] font-mono text-muted block">
-                            ${addon.price} {isNightly ? '/ night' : 'one-time'}
+                            {formatMoney(addon.price)} {isNightly ? '/ night' : 'one-time'}
                           </span>
                         </div>
 
                         <div className="flex items-center space-x-4 shrink-0">
                           <span className="font-mono text-base font-semibold text-ink">
-                            ${itemTotal}
+                            {formatMoney(itemTotal)}
                           </span>
                           <button
                             onClick={() => toggleAddOn(addon.id, isSelected ? 0 : 1)}
@@ -628,11 +630,12 @@ export const BookingPage: React.FC = () => {
                         {state.selectedAddOns.map((sel) => {
                           const addon = addOns.find((a) => a.id === sel.addOnId);
                           const isNightly = addon?.basis === 'per night' || addon?.isPerNight;
+                          const addonCost = addon ? (isNightly ? addon.price * totalNights * sel.quantity : addon.price * sel.quantity) : 0;
                           return (
                             <div key={sel.addOnId} className="flex justify-between font-mono text-muted">
                               <span>{addon?.name} (Qty {sel.quantity})</span>
                               <span className="text-ink">
-                                ${addon ? (isNightly ? addon.price * totalNights * sel.quantity : addon.price * sel.quantity) : 0}
+                                {formatMoney(addonCost)}
                               </span>
                             </div>
                           );
@@ -789,18 +792,18 @@ export const BookingPage: React.FC = () => {
                 {/* Price Breakdown in Geist Mono */}
                 <div className="pt-4 border-t border-hairline space-y-2 text-xs font-mono">
                   <div className="flex justify-between text-muted">
-                    <span>Accommodations ({totalNights} nights × ${basePricePerNight})</span>
-                    <span className="text-ink">${roomSubtotal}</span>
+                    <span>Accommodations ({totalNights} nights × {formatMoney(basePricePerNight)})</span>
+                    <span className="text-ink">{formatMoney(roomSubtotal)}</span>
                   </div>
                   {addOnsSubtotal > 0 && (
                     <div className="flex justify-between text-muted">
                       <span>Enhancements & Add-ons</span>
-                      <span className="text-ink">${addOnsSubtotal}</span>
+                      <span className="text-ink">{formatMoney(addOnsSubtotal)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-muted">
                     <span>Taxes & Lodging Assessments (14%)</span>
-                    <span className="text-ink">${taxesAndFees}</span>
+                    <span className="text-ink">{formatMoney(taxesAndFees)}</span>
                   </div>
                   <div className="flex justify-between text-muted">
                     <span>Resort & Facility Fee</span>
@@ -808,7 +811,7 @@ export const BookingPage: React.FC = () => {
                   </div>
                   <div className="pt-2 border-t border-hairline flex justify-between text-sm font-semibold text-ink">
                     <span>Total Authorized</span>
-                    <span>${grandTotal}</span>
+                    <span>{formatMoney(grandTotal)}</span>
                   </div>
                 </div>
 
@@ -834,39 +837,54 @@ export const BookingPage: React.FC = () => {
         </div>
 
         {/* Hold Expired Modal */}
-        {holdExpiredModal && (
-          <div className="fixed inset-0 z-50 bg-shade/60 backdrop-blur-xs flex items-center justify-center p-6 animate-in fade-in">
-            <div className="bg-paper border border-hairline rounded-[10px] p-6 max-w-md w-full space-y-4 shadow-xl text-center">
-              <div className="w-10 h-10 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto">
-                <AlertTriangle className="w-5 h-5" />
-              </div>
-              <h3 className="font-serif text-2xl text-ink">Your Villa Hold Has Expired</h3>
-              <p className="text-xs text-muted leading-relaxed">
-                To keep our inventory fair to all travelers, held units are released after 10 minutes. Would you like an extra 10 minutes to finish reserving this accommodation?
-              </p>
-              <div className="flex space-x-3 pt-2">
-                <button
-                  onClick={() => {
-                    setHoldExpiredModal(false);
-                    extendHoldTimer();
-                  }}
-                  className="flex-1 bg-water text-white py-2.5 rounded-[2px] text-xs font-medium cursor-pointer"
-                >
-                  Extend Hold for 10 Min
-                </button>
-                <button
-                  onClick={() => {
-                    setHoldExpiredModal(false);
-                    navigate('/stay');
-                  }}
-                  className="flex-1 bg-canvas border border-hairline text-ink py-2.5 rounded-[2px] text-xs font-medium cursor-pointer"
-                >
-                  Return to Stays
-                </button>
-              </div>
+        <AnimatePresence>
+          {holdExpiredModal && (
+            <div className="fixed inset-0 z-70 flex items-center justify-center p-6">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setHoldExpiredModal(false)}
+                className="fixed inset-0 bg-shade/60 backdrop-blur-xs"
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                transition={{ duration: 0.2 }}
+                className="relative z-10 bg-paper border border-hairline rounded-[10px] p-6 max-w-md w-full space-y-4 shadow-2xl text-center"
+              >
+                <div className="w-10 h-10 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto">
+                  <AlertTriangle className="w-5 h-5" />
+                </div>
+                <h3 className="font-serif text-2xl text-ink">Your Villa Hold Has Expired</h3>
+                <p className="text-xs text-muted leading-relaxed">
+                  To keep our inventory fair to all travelers, held units are released after 10 minutes. Would you like an extra 10 minutes to finish reserving this accommodation?
+                </p>
+                <div className="flex space-x-3 pt-2">
+                  <button
+                    onClick={() => {
+                      setHoldExpiredModal(false);
+                      extendHoldTimer();
+                    }}
+                    className="flex-1 bg-water hover:brightness-110 text-white py-2.5 rounded-[2px] text-xs font-medium cursor-pointer"
+                  >
+                    Extend Hold for 10 Min
+                  </button>
+                  <button
+                    onClick={() => {
+                      setHoldExpiredModal(false);
+                      navigate('/stay');
+                    }}
+                    className="flex-1 bg-canvas border border-hairline text-ink py-2.5 rounded-[2px] text-xs font-medium cursor-pointer hover:bg-hairline/50"
+                  >
+                    Return to Stays
+                  </button>
+                </div>
+              </motion.div>
             </div>
-          </div>
-        )}
+          )}
+        </AnimatePresence>
 
       </main>
 
@@ -895,6 +913,7 @@ const BookingSideSummary: React.FC<BookingSideSummaryProps> = ({
   taxes,
   grandTotal
 }) => {
+  const { formatMoney } = useBooking();
   return (
     <div className="bg-paper border border-hairline rounded-[10px] p-6 space-y-5 shadow-xs">
       <div className="flex gap-3 items-center border-b border-hairline pb-4">
@@ -931,15 +950,15 @@ const BookingSideSummary: React.FC<BookingSideSummaryProps> = ({
       <div className="space-y-2 text-xs font-mono">
         <div className="flex justify-between text-muted">
           <span>Accommodations</span>
-          <span className="text-ink">${roomTotal}</span>
+          <span className="text-ink">{formatMoney(roomTotal)}</span>
         </div>
         <div className="flex justify-between text-muted">
           <span>Taxes & lodging fee (14%)</span>
-          <span className="text-ink">${taxes}</span>
+          <span className="text-ink">{formatMoney(taxes)}</span>
         </div>
         <div className="pt-2 border-t border-hairline flex justify-between text-sm font-semibold">
           <span className="font-sans text-ink">Estimated Total</span>
-          <span className="text-ink">${grandTotal}</span>
+          <span className="text-ink">{formatMoney(grandTotal)}</span>
         </div>
       </div>
 
