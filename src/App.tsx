@@ -15,6 +15,7 @@ import { FAQPage } from './pages/FAQPage';
 import { ContactPage } from './pages/ContactPage';
 import { BookingPage } from './pages/BookingPage';
 import { ManageBookingPage } from './pages/ManageBookingPage';
+import { AccountPage } from './pages/AccountPage';
 
 // Scroll to top on route change
 function ScrollToTop() {
@@ -45,6 +46,7 @@ export default function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/book" element={<BookingPage />} />
           <Route path="/manage-booking" element={<ManageBookingPage />} />
+          <Route path="/account" element={<AccountPage />} />
           {/* Fallback */}
           <Route path="*" element={<HomePage />} />
         </Routes>
