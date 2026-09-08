@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Phone, Globe, User, ShieldCheck, DollarSign, Volume2, VolumeX, Sun, Sparkles } from 'lucide-react';
+import { Menu, X, Phone, Globe, User, ShieldCheck, DollarSign, Volume2, VolumeX, Sun, Sparkles, MapPin, Compass } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useBooking, CurrencyCode } from '../../context/BookingContext';
 
@@ -32,7 +32,7 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 40) {
+      if (window.scrollY > 30) {
         setScrolled(true);
       } else {
         setScrolled(false);
@@ -74,29 +74,30 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
   return (
     <header
       id="main-header"
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isTransparent
-          ? 'bg-transparent text-white border-b border-white/15'
-          : 'bg-canvas text-ink border-b border-hairline shadow-xs'
+          ? 'bg-gradient-to-b from-shade/80 via-shade/40 to-transparent text-white border-b border-white/15 backdrop-blur-[2px]'
+          : 'bg-canvas/95 backdrop-blur-md text-ink border-b border-hairline/80 shadow-xs'
       }`}
     >
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 md:px-8 h-20 flex items-center justify-between">
-        {/* Left: Wordmark & Live Weather Pill */}
-        <div className="flex items-center space-x-4">
+      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-20 flex items-center justify-between gap-4">
+        
+        {/* Left: Wordmark & Live Burbank Weather Pill */}
+        <div className="flex items-center space-x-3 sm:space-x-5 shrink-0">
           <Link
             to="/"
             className="flex flex-col group focus-visible:outline-water"
             aria-label="The Tangerine Hotel & Resort Home"
           >
             <span
-              className={`font-serif text-2xl tracking-tight leading-none ${
+              className={`font-serif text-2xl lg:text-[26px] tracking-tight leading-none font-normal transition-colors ${
                 isTransparent ? 'text-white' : 'text-ink'
               }`}
             >
               The Tangerine
             </span>
             <span
-              className={`text-[11px] tracking-[0.2em] uppercase font-sans font-medium mt-1 ${
+              className={`text-[10px] tracking-[0.22em] uppercase font-sans font-medium mt-1 transition-colors ${
                 isTransparent ? 'text-white/80' : 'text-muted'
               }`}
             >
@@ -104,11 +105,11 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
             </span>
           </Link>
 
-          {/* Temperature & Weather Pill Toggle */}
+          {/* Temperature & Weather Pill Toggle (Desktop & Tablet) */}
           <button
             onClick={toggleTempUnit}
             title={`Click to switch to °${tempUnit === 'F' ? 'C' : 'F'}`}
-            className={`hidden xl:flex items-center space-x-1.5 px-2.5 py-1 rounded-[4px] text-[11px] font-mono border transition-all cursor-pointer ${
+            className={`hidden 2xl:flex items-center space-x-1.5 px-2.5 py-1 rounded-[4px] text-[11px] font-mono border transition-all cursor-pointer ${
               isTransparent
                 ? 'border-white/20 bg-white/10 text-white/90 hover:bg-white/20'
                 : 'border-hairline bg-paper/80 text-muted hover:text-ink hover:border-brass/50'
@@ -125,65 +126,117 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
         </div>
 
         {/* Center: Desktop Navigation */}
-        <nav className="hidden lg:flex items-center space-x-6 xl:space-x-7 text-[15px] font-medium" aria-label="Main navigation">
+        <nav
+          className="hidden lg:flex items-center space-x-5 xl:space-x-8 text-[14px] xl:text-[15px] font-medium"
+          aria-label="Main navigation"
+        >
           <Link
             to="/stay"
-            className={`transition-colors py-2 ${
-              location.pathname === '/stay' ? 'text-water font-semibold' : isTransparent ? 'hover:text-white/80' : 'text-ink/80 hover:text-ink'
+            className={`transition-colors py-1 relative ${
+              location.pathname === '/stay'
+                ? 'text-water font-semibold'
+                : isTransparent
+                ? 'text-white/90 hover:text-white'
+                : 'text-ink/80 hover:text-ink'
             }`}
           >
-            Stay
+            <span>Stay</span>
+            {location.pathname === '/stay' && (
+              <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-water rounded-full" />
+            )}
           </Link>
+
           <Link
             to="/resort-map"
-            className={`transition-colors py-2 flex items-center gap-1.5 ${
-              location.pathname === '/resort-map' ? 'text-water font-semibold' : isTransparent ? 'hover:text-white/80' : 'text-ink/80 hover:text-ink'
+            className={`transition-colors py-1 flex items-center gap-1.5 relative ${
+              location.pathname === '/resort-map'
+                ? 'text-water font-semibold'
+                : isTransparent
+                ? 'text-white/90 hover:text-white'
+                : 'text-ink/80 hover:text-ink'
             }`}
           >
             <span>Villas</span>
-            <span className="text-[10px] uppercase font-mono tracking-wider px-1.5 py-0.5 rounded-[2px] bg-brass/20 text-brass">Site Map</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider px-1.5 py-0.5 rounded-[2px] bg-brass/20 text-brass">
+              Site Map
+            </span>
+            {location.pathname === '/resort-map' && (
+              <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-water rounded-full" />
+            )}
           </Link>
+
           <Link
             to="/explore"
-            className={`transition-colors py-2 ${
-              location.pathname.startsWith('/explore') ? 'text-water font-semibold' : isTransparent ? 'hover:text-white/80' : 'text-ink/80 hover:text-ink'
+            className={`transition-colors py-1 relative ${
+              location.pathname.startsWith('/explore')
+                ? 'text-water font-semibold'
+                : isTransparent
+                ? 'text-white/90 hover:text-white'
+                : 'text-ink/80 hover:text-ink'
             }`}
           >
-            Explore
+            <span>Explore Map</span>
+            {location.pathname.startsWith('/explore') && (
+              <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-water rounded-full" />
+            )}
           </Link>
+
           <Link
             to="/dining"
-            className={`transition-colors py-2 ${
-              location.pathname === '/dining' ? 'text-water font-semibold' : isTransparent ? 'hover:text-white/80' : 'text-ink/80 hover:text-ink'
+            className={`transition-colors py-1 relative ${
+              location.pathname === '/dining'
+                ? 'text-water font-semibold'
+                : isTransparent
+                ? 'text-white/90 hover:text-white'
+                : 'text-ink/80 hover:text-ink'
             }`}
           >
-            Dining
+            <span>Dining</span>
+            {location.pathname === '/dining' && (
+              <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-water rounded-full" />
+            )}
           </Link>
+
           <Link
             to="/offers"
-            className={`transition-colors py-2 ${
-              location.pathname.startsWith('/offers') ? 'text-water font-semibold' : isTransparent ? 'hover:text-white/80' : 'text-ink/80 hover:text-ink'
+            className={`transition-colors py-1 relative ${
+              location.pathname.startsWith('/offers')
+                ? 'text-water font-semibold'
+                : isTransparent
+                ? 'text-white/90 hover:text-white'
+                : 'text-ink/80 hover:text-ink'
             }`}
           >
-            Offers
+            <span>Offers</span>
+            {location.pathname.startsWith('/offers') && (
+              <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-water rounded-full" />
+            )}
           </Link>
+
           <Link
             to="/gallery"
-            className={`transition-colors py-2 ${
-              location.pathname === '/gallery' ? 'text-water font-semibold' : isTransparent ? 'hover:text-white/80' : 'text-ink/80 hover:text-ink'
+            className={`transition-colors py-1 relative ${
+              location.pathname === '/gallery'
+                ? 'text-water font-semibold'
+                : isTransparent
+                ? 'text-white/90 hover:text-white'
+                : 'text-ink/80 hover:text-ink'
             }`}
           >
-            Gallery
+            <span>Gallery</span>
+            {location.pathname === '/gallery' && (
+              <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-water rounded-full" />
+            )}
           </Link>
         </nav>
 
         {/* Right actions: Ambience Audio, Currency, Lang, User, Check availability */}
-        <div className="hidden md:flex items-center space-x-3.5 lg:space-x-4">
+        <div className="hidden lg:flex items-center space-x-2.5 xl:space-x-3.5 shrink-0">
           
           {/* Ambient Grounds Sound Generator Toggle */}
           <button
             onClick={toggleAmbientAudio}
-            className={`p-2 rounded-[4px] border transition-all cursor-pointer flex items-center gap-1 text-xs ${
+            className={`p-2 rounded-[4px] border transition-all cursor-pointer flex items-center gap-1.5 text-xs ${
               ambientAudioPlaying
                 ? 'bg-water text-white border-water shadow-xs'
                 : isTransparent
@@ -196,7 +249,7 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
             {ambientAudioPlaying ? (
               <>
                 <Volume2 className="w-3.5 h-3.5 animate-pulse" />
-                <span className="text-[11px] font-mono hidden xl:inline">Ambience On</span>
+                <span className="text-[11px] font-mono hidden xl:inline">Ambience</span>
               </>
             ) : (
               <VolumeX className="w-3.5 h-3.5" />
@@ -210,7 +263,7 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
                 setCurrDropdownOpen(!currDropdownOpen);
                 setLangDropdownOpen(false);
               }}
-              className={`flex items-center space-x-1 text-xs font-mono py-1 px-2 rounded-[2px] border cursor-pointer ${
+              className={`flex items-center space-x-1 text-xs font-mono py-1.5 px-2.5 rounded-[3px] border cursor-pointer transition-colors ${
                 isTransparent
                   ? 'border-white/20 text-white hover:bg-white/10'
                   : 'border-hairline text-ink hover:bg-paper'
@@ -227,7 +280,7 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 6 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-40 bg-paper border border-hairline rounded-[4px] shadow-lg py-1 text-xs text-ink z-60"
+                  className="absolute right-0 mt-2 w-44 bg-paper border border-hairline rounded-[6px] shadow-xl py-1 text-xs text-ink z-60"
                 >
                   <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-muted border-b border-hairline">
                     Display Currency
@@ -259,7 +312,7 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
                 setLangDropdownOpen(!langDropdownOpen);
                 setCurrDropdownOpen(false);
               }}
-              className={`flex items-center space-x-1 text-xs uppercase tracking-wider py-1 px-2 rounded-[2px] border cursor-pointer ${
+              className={`flex items-center space-x-1 text-xs uppercase tracking-wider py-1.5 px-2.5 rounded-[3px] border cursor-pointer transition-colors ${
                 isTransparent
                   ? 'border-white/20 text-white hover:bg-white/10'
                   : 'border-hairline text-ink hover:bg-paper'
@@ -277,7 +330,7 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 6 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-32 bg-paper border border-hairline rounded-[4px] shadow-lg py-1 text-xs text-ink z-60"
+                  className="absolute right-0 mt-2 w-36 bg-paper border border-hairline rounded-[6px] shadow-xl py-1 text-xs text-ink z-60"
                 >
                   {['EN', 'FR', 'ES', 'DE', 'JA'].map((lang) => (
                     <button
@@ -302,8 +355,10 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
           {/* Guest Account Portal */}
           <Link
             to="/account"
-            className={`p-2 rounded-[2px] transition-colors ${
-              isTransparent ? 'text-white/80 hover:text-white' : 'text-muted hover:text-ink'
+            className={`p-2 rounded-[3px] transition-colors border ${
+              isTransparent
+                ? 'border-white/20 text-white/90 hover:text-white hover:bg-white/10'
+                : 'border-hairline text-muted hover:text-ink hover:bg-paper'
             }`}
             title="Guest Account & Reservations"
             aria-label="Guest Account"
@@ -311,44 +366,54 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
             <User className="w-4 h-4" />
           </Link>
 
-          {/* Primary Action Button with micro-interaction */}
+          {/* Primary Action Button */}
           <button
             id="header-check-availability-btn"
             onClick={() => navigate('/book')}
-            className="bg-water hover:brightness-110 active:scale-[0.98] text-white px-5 py-2.5 rounded-[2px] text-[15px] font-medium tracking-wide transition-all duration-150 shadow-xs focus-visible:outline-water cursor-pointer"
+            className="bg-water hover:brightness-110 active:scale-[0.98] text-white px-4.5 xl:px-5 py-2.5 rounded-[3px] text-xs xl:text-sm font-medium tracking-wide transition-all duration-150 shadow-xs focus-visible:outline-water cursor-pointer whitespace-nowrap"
           >
             Check availability
           </button>
         </div>
 
-        {/* Mobile menu trigger */}
-        <div className="flex md:hidden items-center space-x-2">
+        {/* Mobile & Tablet Controls (Visible under lg / 1024px) */}
+        <div className="flex lg:hidden items-center space-x-2">
+          {/* Temp Pill */}
           <button
             onClick={toggleTempUnit}
-            className={`px-2 py-1 rounded-[2px] text-[11px] font-mono border ${
+            className={`hidden sm:flex px-2 py-1 rounded-[3px] text-[11px] font-mono border ${
               isTransparent ? 'border-white/20 text-white' : 'border-hairline text-muted'
             }`}
           >
             {convertTemp(78)}
           </button>
+
+          {/* Quick Book Button */}
           <button
             onClick={() => navigate('/book')}
-            className="bg-water text-white px-3.5 py-1.5 rounded-[2px] text-xs font-medium cursor-pointer"
+            className="bg-water text-white px-3 py-1.5 rounded-[3px] text-xs font-medium cursor-pointer shadow-xs whitespace-nowrap"
           >
             Check dates
           </button>
+
+          {/* Mobile Menu Hamburger Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`p-2 rounded-[2px] cursor-pointer ${isTransparent ? 'text-white' : 'text-ink'}`}
+            className={`p-2 rounded-[3px] cursor-pointer border transition-colors ${
+              isTransparent
+                ? 'border-white/20 text-white hover:bg-white/10'
+                : 'border-hairline text-ink hover:bg-paper'
+            }`}
             aria-label="Toggle navigation menu"
             aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
+
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile & Tablet Dropdown Navigation Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -356,53 +421,54 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-paper border-b border-hairline px-6 py-6 space-y-4 shadow-xl z-60 overflow-hidden"
+            className="lg:hidden bg-paper/98 backdrop-blur-md border-b border-hairline px-6 py-6 space-y-4 shadow-2xl z-60 overflow-hidden"
           >
-            <div className="flex flex-col space-y-3 text-base text-ink font-medium">
-              <Link to="/stay" className="py-2 border-b border-hairline/60">
+            <div className="flex flex-col space-y-2.5 text-[15px] text-ink font-medium">
+              <Link to="/stay" className="py-2 border-b border-hairline/60 hover:text-water transition-colors">
                 Stay & Room Types
               </Link>
-              <Link to="/resort-map" className="py-2 border-b border-hairline/60 flex items-center justify-between">
+              <Link to="/resort-map" className="py-2 border-b border-hairline/60 flex items-center justify-between hover:text-water transition-colors">
                 <span>Interactive Villa Site Map</span>
-                <span className="text-xs uppercase font-mono px-2 py-0.5 rounded-[2px] bg-brass/20 text-brass">Signature</span>
+                <span className="text-xs uppercase font-mono px-2 py-0.5 rounded-[2px] bg-brass/20 text-brass font-semibold">Signature</span>
               </Link>
-              <Link to="/explore" className="py-2 border-b border-hairline/60">
-                Area Explorer Map
+              <Link to="/explore" className="py-2 border-b border-hairline/60 hover:text-water transition-colors flex items-center justify-between">
+                <span>Area Explorer & Vicinity Map</span>
+                <span className="text-xs text-brass font-mono">⭐ 4.9 Hotel</span>
               </Link>
-              <Link to="/dining" className="py-2 border-b border-hairline/60">
+              <Link to="/dining" className="py-2 border-b border-hairline/60 hover:text-water transition-colors">
                 Dining & Menus
               </Link>
-              <Link to="/offers" className="py-2 border-b border-hairline/60">
+              <Link to="/offers" className="py-2 border-b border-hairline/60 hover:text-water transition-colors">
                 Seasonal Offers
               </Link>
-              <Link to="/gallery" className="py-2 border-b border-hairline/60">
+              <Link to="/gallery" className="py-2 border-b border-hairline/60 hover:text-water transition-colors">
                 Photo Gallery
               </Link>
-              <Link to="/about" className="py-2 border-b border-hairline/60">
+              <Link to="/about" className="py-2 border-b border-hairline/60 hover:text-water transition-colors">
                 About The Tangerine
               </Link>
-              <Link to="/policies" className="py-2 border-b border-hairline/60 text-muted text-sm">
+              <Link to="/policies" className="py-2 border-b border-hairline/60 text-muted text-sm hover:text-ink">
                 Hotel Policies & Rates
               </Link>
-              <Link to="/accessibility" className="py-2 border-b border-hairline/60 text-muted text-sm">
+              <Link to="/accessibility" className="py-2 border-b border-hairline/60 text-muted text-sm hover:text-ink">
                 Universal Accessibility
               </Link>
-              <Link to="/contact" className="py-2 border-b border-hairline/60 text-muted text-sm">
+              <Link to="/contact" className="py-2 border-b border-hairline/60 text-muted text-sm hover:text-ink">
                 Contact Concierge
               </Link>
             </div>
 
             {/* Mobile Toggles: Currency & Ambience */}
-            <div className="pt-2 border-t border-hairline flex items-center justify-between">
+            <div className="pt-2 border-t border-hairline flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center space-x-2">
                 <span className="text-xs text-muted font-mono">Currency:</span>
                 <div className="flex space-x-1">
-                  {(['USD', 'EUR', 'GBP'] as CurrencyCode[]).map((c) => (
+                  {(['USD', 'EUR', 'GBP', 'CAD', 'JPY'] as CurrencyCode[]).map((c) => (
                     <button
                       key={c}
                       onClick={() => setCurrency(c)}
                       className={`px-2 py-0.5 text-xs font-mono rounded-[2px] border ${
-                        currency === c ? 'bg-water text-white border-water' : 'border-hairline text-muted'
+                        currency === c ? 'bg-water text-white border-water font-semibold' : 'border-hairline text-muted'
                       }`}
                     >
                       {c}
@@ -413,27 +479,30 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
 
               <button
                 onClick={toggleAmbientAudio}
-                className="flex items-center gap-1.5 text-xs text-ink px-2.5 py-1 rounded-[2px] border border-hairline"
+                className="flex items-center gap-1.5 text-xs text-ink px-2.5 py-1 rounded-[3px] border border-hairline"
               >
                 {ambientAudioPlaying ? <Volume2 className="w-3.5 h-3.5 text-water" /> : <VolumeX className="w-3.5 h-3.5 text-muted" />}
-                <span className="font-mono text-[11px]">{ambientAudioPlaying ? 'Sound On' : 'Sound Off'}</span>
+                <span className="font-mono text-[11px]">{ambientAudioPlaying ? 'Ambience On' : 'Ambience Off'}</span>
               </button>
             </div>
 
             <div className="pt-2 flex flex-col space-y-3">
               <div className="flex items-center justify-between text-xs text-muted font-mono">
-                <span>Front Desk: +1 818 555 0190</span>
+                <span>Front Desk: +1 818 843 1121</span>
                 <Link to="/account" className="underline text-water flex items-center gap-1">
                   <User className="w-3.5 h-3.5" /> Guest Portal
                 </Link>
               </div>
-              <div className="flex items-center justify-between pt-2">
-                <Link to="/admin" className="text-xs text-muted flex items-center gap-1 hover:text-ink">
-                  <ShieldCheck className="w-3.5 h-3.5 text-brass" /> Staff Dashboard
+              <div className="flex items-center justify-between pt-2 gap-3">
+                <Link to="/admin" className="text-xs text-muted flex items-center gap-1 hover:text-ink shrink-0">
+                  <ShieldCheck className="w-3.5 h-3.5 text-brass" /> Staff
                 </Link>
                 <button
-                  onClick={() => navigate('/book')}
-                  className="w-1/2 bg-water text-white py-2.5 rounded-[2px] text-sm font-medium text-center cursor-pointer"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigate('/book');
+                  }}
+                  className="flex-1 bg-water text-white py-2.5 rounded-[3px] text-sm font-medium text-center cursor-pointer shadow-xs"
                 >
                   Check availability
                 </button>

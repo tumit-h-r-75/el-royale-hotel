@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
 
   return (
     <footer id="site-footer" className="bg-shade text-canvas pt-20 pb-12 border-t border-shade">
-      <div className="max-w-[1240px] mx-auto px-6 md:px-8">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12">
         
         {/* Main 4-column footer content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-canvas/15">

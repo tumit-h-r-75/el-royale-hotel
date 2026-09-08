@@ -61,7 +61,7 @@ export const HomePage: React.FC = () => {
         <Header isHeroPage={true} />
 
         {/* Hero Copy at Lower Left */}
-        <div className="relative z-10 max-w-[1240px] mx-auto px-6 md:px-8 pb-16 sm:pb-20 md:pb-24 w-full mt-auto">
+        <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-8 pb-16 sm:pb-20 md:pb-24 w-full mt-auto">
           <div className="max-w-[760px] space-y-3">
             {/* Live Indicator */}
             <div className="inline-flex items-center space-x-2 bg-shade/70 backdrop-blur-xs border border-white/20 px-3 py-1 rounded-[2px] text-xs text-white">
@@ -92,7 +92,7 @@ export const HomePage: React.FC = () => {
       <div className="h-6 sm:h-8 md:h-12" />
 
       {/* 2. INTRODUCTION SECTION */}
-      <section id="introduction" className="py-24 md:py-28 max-w-[1240px] mx-auto px-6 md:px-8 border-b border-hairline">
+      <section id="introduction" className="py-24 md:py-28 max-w-[1440px] mx-auto px-6 md:px-8 border-b border-hairline">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
           {/* Statement Left */}
@@ -136,7 +136,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 3. STAY SECTION - Asymmetric Editorial Grid */}
-      <section id="stay" className="py-24 md:py-28 max-w-[1240px] mx-auto px-6 md:px-8">
+      <section id="stay" className="py-24 md:py-28 max-w-[1440px] mx-auto px-6 md:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
             <h2 className="font-serif text-3xl md:text-4xl text-ink font-normal">
@@ -284,7 +284,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 5. OFFERS SECTION */}
-      <section id="offers" className="py-24 md:py-28 max-w-[1240px] mx-auto px-6 md:px-8">
+      <section id="offers" className="py-24 md:py-28 max-w-[1440px] mx-auto px-6 md:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
             <h2 className="font-serif text-3xl md:text-4xl text-ink font-normal">Special Stay Inclusions</h2>
@@ -352,7 +352,7 @@ export const HomePage: React.FC = () => {
 
       {/* 6. THE RESORT SITE MAP TEASER */}
       <section id="resort-teaser" className="py-20 md:py-24 bg-[#E8EDE6] border-y border-hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-8">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             <div className="lg:col-span-5 space-y-5">
@@ -418,7 +418,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 7. DINING SECTION */}
-      <section id="dining" className="py-24 md:py-28 max-w-[1240px] mx-auto px-6 md:px-8">
+      <section id="dining" className="py-24 md:py-28 max-w-[1440px] mx-auto px-6 md:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
             <h2 className="font-serif text-3xl md:text-4xl text-ink font-normal">Dining & Provisions</h2>
@@ -471,7 +471,7 @@ export const HomePage: React.FC = () => {
 
       {/* 8. EXPLORE SECTION - Teaser for Area Map & Hotel Location */}
       <section id="explore-teaser" className="py-24 md:py-28 bg-[#EBF0EA] border-t border-hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-8 space-y-8">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-8 space-y-8">
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
@@ -603,7 +603,7 @@ export const HomePage: React.FC = () => {
 
       {/* 9. GALLERY STRIP - Horizontally scrolling row */}
       <section id="gallery-strip" className="py-20 md:py-24 border-t border-hairline overflow-hidden">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-8 mb-6 flex items-center justify-between">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-8 mb-6 flex items-center justify-between">
           <div>
             <h2 className="font-serif text-2xl md:text-3xl text-ink font-normal">Atmosphere & Details</h2>
             <p className="text-xs text-muted mt-1 font-sans">Belgian linen, polished limestone, citrus fruit, and afternoon shadow.</p>
@@ -639,7 +639,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 10. REVIEWS SECTION - Rating summary + 3-column wall */}
-      <section id="reviews" className="py-24 md:py-28 max-w-[1240px] mx-auto px-6 md:px-8 border-t border-hairline">
+      <section id="reviews" className="py-24 md:py-28 max-w-[1440px] mx-auto px-6 md:px-8 border-t border-hairline">
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between border-b border-hairline pb-8">
           <div>
             <span className="text-xs uppercase tracking-wider text-muted font-sans font-medium block">Guest Reflections</span>
@@ -680,7 +680,7 @@ export const HomePage: React.FC = () => {
 
       {/* 11. CLOSING CONVERSION BAND ON SHADE */}
       <section id="closing-conversion" className="bg-shade text-canvas py-20 md:py-24 border-t border-shade">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-8 text-center space-y-6">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-8 text-center space-y-6">
           <div className="max-w-[720px] mx-auto space-y-3">
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-canvas font-normal">
               Reserve your quiet in the valley.

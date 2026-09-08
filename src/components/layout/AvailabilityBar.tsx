@@ -68,7 +68,7 @@ export const AvailabilityBar: React.FC<AvailabilityBarProps> = ({ isSticky = fal
       {/* Desktop & Tablet Bar */}
       <div
         id="availability-bar-container"
-        className={`w-full max-w-[1240px] mx-auto px-4 sm:px-6 transition-all duration-200 z-40 ${
+        className={`w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 transition-all duration-200 z-40 ${
           isSticky ? 'sticky top-20 shadow-xl my-2' : ''
         }`}
       >
