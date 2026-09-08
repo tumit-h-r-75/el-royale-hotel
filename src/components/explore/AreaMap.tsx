@@ -62,7 +62,7 @@ export const AreaMap: React.FC<AreaMapProps> = ({
   const [searchFocused, setSearchFocused] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
-  const [mapMode, setMapMode] = useState<'vector' | 'satellite'>('vector');
+  const [mapMode, setMapMode] = useState<'vector' | 'satellite'>('satellite');
 
   const query = externalSearchQuery !== undefined ? externalSearchQuery : internalSearch;
   const setQuery = externalOnSearchChange || setInternalSearch;
