@@ -1,0 +1,7 @@
+{
+  "name": "The Tangerine Hotel & Resort",
+  "description": "Boutique hotel & villas in Los Angeles featuring interactive resort site map, area guide, room booking and guest portal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
