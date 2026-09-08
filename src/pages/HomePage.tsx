@@ -6,12 +6,12 @@ import { Footer } from '../components/layout/Footer';
 import { accommodations } from '../data/rooms';
 import { offers } from '../data/offers';
 import { diningOutlets } from '../data/dining';
-import { attractions } from '../data/attractions';
+import { attractions, PROPERTY_LOCATION } from '../data/attractions';
 import { galleryPhotos } from '../data/gallery';
 import { reviews, reviewSummary } from '../data/reviews';
 import { getLowestRateTonight } from '../data/rates';
 import { ResortPlanSVG } from '../components/resortMap/ResortPlanSVG';
-import { Phone, ArrowRight, Compass, Sparkles, MapPin, ChevronRight, Star } from 'lucide-react';
+import { Phone, ArrowRight, Compass, Sparkles, MapPin, ChevronRight, Star, Search } from 'lucide-react';
 import { useBooking } from '../context/BookingContext';
 
 export const HomePage: React.FC = () => {
@@ -61,7 +61,7 @@ export const HomePage: React.FC = () => {
         <Header isHeroPage={true} />
 
         {/* Hero Copy at Lower Left */}
-        <div className="relative z-10 max-w-[1240px] mx-auto px-6 md:px-8 pb-28 md:pb-24 w-full mt-auto">
+        <div className="relative z-10 max-w-[1240px] mx-auto px-6 md:px-8 pb-16 sm:pb-20 md:pb-24 w-full mt-auto">
           <div className="max-w-[760px] space-y-3">
             {/* Live Indicator */}
             <div className="inline-flex items-center space-x-2 bg-shade/70 backdrop-blur-xs border border-white/20 px-3 py-1 rounded-[2px] text-xs text-white">
@@ -81,15 +81,15 @@ export const HomePage: React.FC = () => {
             </p>
           </div>
         </div>
-
-        {/* Availability Bar Docked Across the Bottom Edge */}
-        <div className="relative z-20 -mb-7 w-full">
-          <AvailabilityBar />
-        </div>
       </section>
 
+      {/* Availability Bar Floating on top of Hero and Page Content without overflow clipping */}
+      <div className="relative z-40 -mt-7 sm:-mt-9 md:-mt-10 w-full">
+        <AvailabilityBar />
+      </div>
+
       {/* Spacer to absorb docked bar */}
-      <div className="h-16 md:h-20" />
+      <div className="h-6 sm:h-8 md:h-12" />
 
       {/* 2. INTRODUCTION SECTION */}
       <section id="introduction" className="py-24 md:py-28 max-w-[1240px] mx-auto px-6 md:px-8 border-b border-hairline">
@@ -469,24 +469,108 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 8. EXPLORE SECTION - Teaser for Area Map */}
+      {/* 8. EXPLORE SECTION - Teaser for Area Map & Hotel Location */}
       <section id="explore-teaser" className="py-24 md:py-28 bg-[#EBF0EA] border-t border-hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-8 space-y-8">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-ink font-normal">What’s Nearby</h2>
-              <p className="text-muted text-sm mt-2 max-w-[50ch]">
-                Quietly secluded yet minutes from Burbank studios, NoHo theaters, and Griffith trails.
+              <div className="flex items-center space-x-2">
+                <h2 className="font-serif text-3xl md:text-4xl text-ink font-normal">What’s Nearby & Vicinity Map</h2>
+                <span className="hidden sm:inline-flex items-center gap-1 bg-brass/15 text-brass px-2 py-0.5 rounded-[2px] text-xs font-mono font-semibold">
+                  <Star className="w-3 h-3 fill-brass" /> 4.9 Rating
+                </span>
+              </div>
+              <p className="text-muted text-sm mt-2 max-w-[58ch]">
+                Quietly secluded on Riverside Drive, just minutes from Warner Bros soundstages, Universal Studios, and Burbank Airport (BUR).
               </p>
             </div>
-            <Link to="/explore" className="text-water text-sm hover:underline mt-4 md:mt-0 font-medium flex items-center gap-1">
-              <span>See what’s nearby on the area map</span>
+            <Link to="/explore" className="text-water text-sm hover:underline font-medium flex items-center gap-1 shrink-0">
+              <span>Open interactive area map</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
+          {/* Quick Map Search & Category Shortcuts */}
+          <div className="bg-paper border border-hairline rounded-[8px] p-3 shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div className="flex-1 flex items-center gap-2">
+              <Search className="w-4 h-4 text-water shrink-0 ml-1" />
+              <input
+                type="text"
+                placeholder="Search places on map (e.g. Warner Bros, Universal, or The Tangerine)..."
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    navigate(`/explore?q=${encodeURIComponent((e.target as HTMLInputElement).value)}`);
+                  }
+                }}
+                className="w-full bg-transparent border-none text-xs text-ink placeholder:text-muted focus:ring-0 p-1"
+              />
+            </div>
+
+            {/* Quick Chips */}
+            <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar shrink-0 text-xs">
+              <Link
+                to="/explore?hotel=true"
+                className="bg-brass text-white px-2.5 py-1 rounded-[3px] font-medium flex items-center gap-1 shrink-0"
+              >
+                <Star className="w-3 h-3 fill-current" />
+                <span>The Tangerine (⭐ 4.9)</span>
+              </Link>
+              <Link
+                to="/explore?q=Warner"
+                className="bg-canvas hover:bg-hairline/30 text-ink border border-hairline px-2.5 py-1 rounded-[3px] font-mono text-[11px] shrink-0"
+              >
+                Warner Bros (3m)
+              </Link>
+              <Link
+                to="/explore?q=Universal"
+                className="bg-canvas hover:bg-hairline/30 text-ink border border-hairline px-2.5 py-1 rounded-[3px] font-mono text-[11px] shrink-0"
+              >
+                Universal (6m)
+              </Link>
+              <Link
+                to="/explore?q=Airport"
+                className="bg-canvas hover:bg-hairline/30 text-ink border border-hairline px-2.5 py-1 rounded-[3px] font-mono text-[11px] shrink-0"
+              >
+                BUR Airport (8m)
+              </Link>
+            </div>
+          </div>
+
+          {/* Destination Cards Grid with Flagship Hotel Card */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {attractions.slice(0, 4).map((attr) => (
+            
+            {/* 1. Flagship Hotel Location & Rating Card */}
+            <div className="bg-paper border border-brass rounded-[10px] overflow-hidden p-4 flex flex-col justify-between space-y-3 ring-1 ring-brass/40 shadow-sm">
+              <div className="h-36 rounded-[4px] overflow-hidden relative">
+                <img src={PROPERTY_LOCATION.image} alt={PROPERTY_LOCATION.name} className="w-full h-full object-cover" />
+                <span className="absolute top-2 left-2 bg-shade/85 backdrop-blur-xs text-white text-[10px] font-mono px-2 py-0.5 rounded-[2px] flex items-center gap-1">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                  <span>4.9 / 5.0 (284 Reviews)</span>
+                </span>
+              </div>
+              <div>
+                <div className="flex items-center space-x-2 text-[11px] font-mono text-brass font-semibold">
+                  <MapPin className="w-3 h-3 shrink-0" />
+                  <span className="truncate">{PROPERTY_LOCATION.neighborhood}</span>
+                </div>
+                <h4 className="font-serif text-base text-ink font-semibold mt-1 truncate">{PROPERTY_LOCATION.name}</h4>
+                <p className="text-xs text-ink/75 line-clamp-2 mt-1">{PROPERTY_LOCATION.description}</p>
+              </div>
+              <div className="pt-2 border-t border-hairline flex items-center justify-between text-xs">
+                <span className="font-mono text-[11px] text-ink font-semibold">From ${PROPERTY_LOCATION.basePrice} / nt</span>
+                <Link
+                  to="/explore?hotel=true"
+                  className="text-xs text-brass hover:underline font-medium flex items-center gap-1"
+                >
+                  <span>Pin on map</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* 2, 3, 4. Nearby Attractions */}
+            {attractions.slice(0, 3).map((attr) => (
               <div
                 key={attr.id}
                 className="bg-paper border border-hairline rounded-[10px] overflow-hidden p-4 flex flex-col justify-between space-y-3 hover:border-water/40 transition-colors"
@@ -513,6 +597,7 @@ export const HomePage: React.FC = () => {
               </div>
             ))}
           </div>
+
         </div>
       </section>
 

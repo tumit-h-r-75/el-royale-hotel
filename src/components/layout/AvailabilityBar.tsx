@@ -69,10 +69,10 @@ export const AvailabilityBar: React.FC<AvailabilityBarProps> = ({ isSticky = fal
       <div
         id="availability-bar-container"
         className={`w-full max-w-[1240px] mx-auto px-4 sm:px-6 transition-all duration-200 z-40 ${
-          isSticky ? 'sticky top-20 shadow-md my-2' : ''
+          isSticky ? 'sticky top-20 shadow-xl my-2' : ''
         }`}
       >
-        <div className="bg-paper border border-hairline rounded-[10px] shadow-sm p-3 md:p-3.5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 text-ink">
+        <div className="bg-paper border border-hairline/90 rounded-[10px] shadow-xl p-3 md:p-3.5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 text-ink relative z-40">
           
           {/* Live indicator (desktop only) */}
           <div className="hidden xl:flex items-center space-x-2 border-r border-hairline pr-4 py-1">

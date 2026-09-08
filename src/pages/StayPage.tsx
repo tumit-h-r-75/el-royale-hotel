@@ -479,7 +479,7 @@ export const StayPage: React.FC = () => {
 
       {/* Mobile Filter Sheet Modal */}
       {mobileFilterOpen && (
-        <div className="fixed inset-0 z-50 bg-shade/60 backdrop-blur-xs flex justify-end md:hidden animate-in fade-in">
+        <div className="fixed inset-0 z-70 bg-shade/60 backdrop-blur-xs flex justify-end md:hidden animate-in fade-in">
           <div className="w-full max-w-[340px] bg-paper h-full p-6 overflow-y-auto space-y-6">
             <div className="flex items-center justify-between border-b border-hairline pb-3">
               <span className="font-serif text-lg text-ink">Refine Stays</span>

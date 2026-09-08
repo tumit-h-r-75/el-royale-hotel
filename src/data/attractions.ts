@@ -2,10 +2,27 @@ import { Attraction } from '../types/hotel';
 
 // The Tangerine Resort Coordinates (Burbank / North Hollywood, CA)
 export const PROPERTY_LOCATION = {
+  id: 'the-tangerine-hotel',
   name: 'The Tangerine Hotel & Resort',
   lat: 34.1808,
   lng: -118.3280,
-  address: '3901 W Riverside Dr, Burbank, CA 91505'
+  address: '3901 W Riverside Dr, Burbank, CA 91505',
+  neighborhood: 'Toluca Lake / Burbank Media District',
+  rating: 4.9,
+  reviewsCount: 284,
+  ratingLabel: 'Exceptional',
+  basePrice: 340,
+  phone: '+1 (818) 843-1121',
+  image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&auto=format&fit=crop',
+  description: 'Unhurried mid-century sanctuary with courtyard citrus groves, heated 75-foot pool, and 14 private villas.',
+  features: ['Heated Pool', 'Private Plunge Pools', 'Free High-Speed Wi-Fi', 'EV Charging Stations', 'Valet & Self Parking'],
+  keyDistances: [
+    { name: 'Warner Bros. Studios', time: '3 min', distance: '0.9 mi' },
+    { name: 'Universal Studios Hollywood', time: '6 min', distance: '2.4 mi' },
+    { name: 'Burbank Bob Hope Airport (BUR)', time: '8 min', distance: '3.2 mi' },
+    { name: 'Griffith Park Observatory', time: '12 min', distance: '5.1 mi' },
+    { name: 'Hollywood Bowl', time: '10 min', distance: '4.2 mi' }
+  ]
 };
 
 export const attractions: Attraction[] = [
