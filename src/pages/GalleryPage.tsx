@@ -45,7 +45,7 @@ export const GalleryPage: React.FC = () => {
               A study in texture, shadow, and citrus sunlight.
             </h1>
             <p className="text-muted text-base">
-              Photographing the quiet moments at The Tangerine: natural Belgian linens, textured lime plaster, afternoon pool reflections, and nightfall over Burbank.
+              Photographing the quiet moments at El Royale Hotel: natural Belgian linens, textured lime plaster, afternoon pool reflections, and nightfall over Burbank.
             </p>
           </div>
 

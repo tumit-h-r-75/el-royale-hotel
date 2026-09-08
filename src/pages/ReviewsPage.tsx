@@ -40,7 +40,7 @@ export const ReviewsPage: React.FC = () => {
                 Reflections on rest, quiet, and service.
               </h1>
               <p className="text-muted text-base max-w-[60ch]">
-                Unfiltered impressions from verified travelers, creative residents, and long-term guests who stayed at The Tangerine.
+                Unfiltered impressions from verified travelers, creative residents, and long-term guests who stayed at El Royale Hotel.
               </p>
             </div>
 

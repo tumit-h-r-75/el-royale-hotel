@@ -22,7 +22,7 @@ export const DiningPage: React.FC = () => {
               Honest ingredients, coastal citrus, and al fresco California shade.
             </h1>
             <p className="text-muted text-base md:text-lg leading-relaxed">
-              Dining at The Tangerine is rooted in the Santa Monica Farmers Market and our own citrus groves. From morning pour-overs beside the pool to evening agave cocktails under the olive trees.
+              Dining at El Royale Hotel is rooted in the Santa Monica Farmers Market and our own citrus groves. From morning pour-overs beside the pool to evening agave cocktails under the olive trees.
             </p>
           </div>
         </section>

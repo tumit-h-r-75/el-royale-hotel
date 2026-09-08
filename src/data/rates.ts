@@ -37,7 +37,7 @@ export const ratePlans: RatePlan[] = [
     paymentPolicy: 'Pay at property upon check-in. Credit card hold only.',
     discountMultiplier: 0.92,
     requiresMember: true,
-    inclusions: ['8% member discount', 'Guaranteed 1:00 PM late check-out', 'Daily morning espresso voucher at Tangerine Pantry']
+    inclusions: ['8% member discount', 'Guaranteed 1:00 PM late check-out', 'Daily morning espresso voucher at El Royale Pantry']
   }
 ];
 

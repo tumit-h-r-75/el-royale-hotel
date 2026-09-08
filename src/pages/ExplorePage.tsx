@@ -105,7 +105,7 @@ export const ExplorePage: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-xs text-muted font-sans mt-1 max-w-[65ch]">
-                  The Tangerine sits at the quiet crossroads of Burbank and North Hollywood. Explore neighborhood soundstages, canyon switchbacks, and local supper clubs.
+                  El Royale Hotel sits at the quiet crossroads of Burbank and North Hollywood. Explore neighborhood soundstages, canyon switchbacks, and local supper clubs.
                 </p>
               </div>
 
@@ -130,7 +130,7 @@ export const ExplorePage: React.FC = () => {
                 <Search className="w-3.5 h-3.5 text-muted absolute left-3 top-2.5" />
                 <input
                   type="text"
-                  placeholder="Search studios, cafes, or 'The Tangerine'..."
+                  placeholder="Search studios, cafes, or 'El Royale Hotel'..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-canvas border border-hairline text-xs pl-8 pr-3 py-2 rounded-[2px] focus:ring-1 focus:ring-brass"
@@ -196,7 +196,7 @@ export const ExplorePage: React.FC = () => {
                 }`}
               >
                 <Star className="w-3.5 h-3.5 fill-brass text-brass" />
-                <span>The Tangerine Hotel (★ 4.9 Rating)</span>
+                <span>El Royale Hotel (★ 4.9 Rating)</span>
               </button>
 
               {ATTRACTION_CATEGORIES.map((cat) => (
@@ -278,7 +278,7 @@ export const ExplorePage: React.FC = () => {
             }`}
           >
             <div className="flex items-center justify-between pb-1 border-b border-hairline text-xs font-mono text-muted">
-              <span>Showing destinations near The Tangerine</span>
+              <span>Showing destinations near El Royale Hotel</span>
               <span>Distances from property</span>
             </div>
 

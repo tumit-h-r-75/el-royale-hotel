@@ -48,7 +48,7 @@ export const addOns: AddOn[] = [
   },
   {
     id: 'pet-concierge',
-    name: 'Tangerine Pet Concierge Package',
+    name: 'El Royale Pet Concierge Package',
     description: 'Custom ceramic water bowls, plush orthopedic pet mattress, organic artisanal treats, waste bags, and curated walking map of local Burbank parks.',
     price: 75,
     basis: 'per stay',

@@ -158,7 +158,7 @@ export const AreaMap: React.FC<AreaMapProps> = ({
           </div>
           <input
             type="text"
-            placeholder="Search map, studios, or 'The Tangerine'..."
+            placeholder="Search map, studios, or 'El Royale Hotel'..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setSearchFocused(true)}
@@ -178,7 +178,7 @@ export const AreaMap: React.FC<AreaMapProps> = ({
           {/* Quick Locate Hotel Star Button */}
           <button
             onClick={locateHotel}
-            title="Locate The Tangerine Hotel & Rating"
+            title="Locate El Royale Hotel & Rating"
             className={`px-2 py-1 rounded-[4px] text-[11px] font-mono font-medium flex items-center gap-1 transition-all shrink-0 cursor-pointer ${
               hotelSelected
                 ? 'bg-brass text-white shadow-xs'
@@ -214,7 +214,7 @@ export const AreaMap: React.FC<AreaMapProps> = ({
                     </div>
                     <div>
                       <div className="font-medium text-ink flex items-center gap-1.5">
-                        <span>The Tangerine Hotel & Resort</span>
+                        <span>El Royale Hotel & Resort</span>
                         <span className="text-[10px] bg-brass text-white px-1 rounded font-mono font-semibold">★ 4.9</span>
                       </div>
                       <div className="text-[11px] text-muted">3901 W Riverside Dr, Burbank (Property)</div>
@@ -248,7 +248,7 @@ export const AreaMap: React.FC<AreaMapProps> = ({
 
               {!suggestions.matchHotel && suggestions.attractions.length === 0 && (
                 <div className="p-3 text-center text-xs text-muted">
-                  No places matching "{query}". Try "Warner Bros", "Universal", or "The Tangerine".
+                  No places matching "{query}". Try "Warner Bros", "Universal", or "El Royale Hotel".
                 </div>
               )}
             </motion.div>
@@ -269,7 +269,7 @@ export const AreaMap: React.FC<AreaMapProps> = ({
             }`}
           >
             <Star className="w-3 h-3 fill-current" />
-            <span>The Tangerine (4.9★)</span>
+            <span>El Royale Hotel (4.9★)</span>
           </button>
 
           {ATTRACTION_CATEGORIES.slice(0, 5).map((cat) => {
@@ -581,7 +581,7 @@ export const AreaMap: React.FC<AreaMapProps> = ({
                 fontFamily="'Instrument Sans', sans-serif"
                 fontWeight="700"
               >
-                The Tangerine
+                El Royale Hotel
               </text>
               <text
                 x="105"

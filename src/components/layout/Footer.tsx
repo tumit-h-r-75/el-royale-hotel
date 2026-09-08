@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
           
           {/* Col 1: Property Identity & Address */}
           <div className="space-y-4">
-            <h3 className="font-serif text-2xl tracking-tight text-canvas">The Tangerine</h3>
+            <h3 className="font-serif text-2xl tracking-tight text-canvas">El Royale Hotel</h3>
             <p className="text-xs uppercase tracking-[0.2em] text-canvas/60 font-sans font-medium">
               Hotel & Villas · Burbank, Los Angeles
             </p>
@@ -135,7 +135,7 @@ export const Footer: React.FC = () => {
         {/* Bottom Bar: Copyright, Socials, Legal, Admin link */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-canvas/50 space-y-4 md:space-y-0">
           <div className="flex items-center space-x-4">
-            <span>© {new Date().getFullYear()} The Tangerine Hotel & Resort LLC. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} El Royale Hotel & Resort LLC. All rights reserved.</span>
             <span className="hidden sm:inline">·</span>
             <Link to="/admin" className="hover:text-brass flex items-center gap-1 text-canvas/40 transition-colors">
               <ShieldCheck className="w-3.5 h-3.5" /> Staff Portal

@@ -87,14 +87,14 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
           <Link
             to="/"
             className="flex flex-col group focus-visible:outline-water"
-            aria-label="The Tangerine Hotel & Resort Home"
+            aria-label="El Royale Hotel & Resort Home"
           >
             <span
               className={`font-serif text-2xl lg:text-[26px] tracking-tight leading-none font-normal transition-colors ${
                 isTransparent ? 'text-white' : 'text-ink'
               }`}
             >
-              The Tangerine
+              El Royale Hotel
             </span>
             <span
               className={`text-[10px] tracking-[0.22em] uppercase font-sans font-medium mt-1 transition-colors ${
@@ -445,7 +445,7 @@ export const Header: React.FC<HeaderProps> = ({ isHeroPage = false }) => {
                 Photo Gallery
               </Link>
               <Link to="/about" className="py-2 border-b border-hairline/60 hover:text-water transition-colors">
-                About The Tangerine
+                About El Royale Hotel
               </Link>
               <Link to="/policies" className="py-2 border-b border-hairline/60 text-muted text-sm hover:text-ink">
                 Hotel Policies & Rates

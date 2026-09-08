@@ -1,9 +1,9 @@
 import { Attraction } from '../types/hotel';
 
-// The Tangerine Resort Coordinates (Burbank / North Hollywood, CA)
+// El Royale Hotel Resort Coordinates (Burbank / North Hollywood, CA)
 export const PROPERTY_LOCATION = {
   id: 'the-tangerine-hotel',
-  name: 'The Tangerine Hotel & Resort',
+  name: 'El Royale Hotel & Resort',
   lat: 34.1808,
   lng: -118.3280,
   address: '3901 W Riverside Dr, Burbank, CA 91505',

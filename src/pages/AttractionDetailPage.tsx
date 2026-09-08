@@ -109,7 +109,7 @@ export const AttractionDetailPage: React.FC = () => {
                 </p>
               </div>
 
-              {/* Tangerine Concierge Insider Tips */}
+              {/* El Royale Concierge Insider Tips */}
               <div className="p-6 rounded-[8px] bg-[#E8EDE6] border border-hairline space-y-3">
                 <div className="flex items-center space-x-2 text-brass">
                   <Sparkles className="w-4 h-4" />

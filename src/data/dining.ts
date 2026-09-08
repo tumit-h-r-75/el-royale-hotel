@@ -52,7 +52,7 @@ export const diningOutlets: DiningOutlet[] = [
       {
         category: 'Poolside Crudo & Small Plates',
         items: [
-          { name: 'Pacific Yellowtail Ceviche', description: 'Tangerine aguachile, diced jicama, serrano chili, avocado, blue corn chips', price: 24, dietary: 'Gluten-Free' },
+          { name: 'Pacific Yellowtail Ceviche', description: 'El Royale aguachile, diced jicama, serrano chili, avocado, blue corn chips', price: 24, dietary: 'Gluten-Free' },
           { name: 'Chilled Baja White Prawns', description: 'Horseradish cocktail sauce, charred lemon cheek, smoked paprika', price: 26, dietary: 'Gluten-Free' },
           { name: 'Crispy Squash Blossom Tempura', description: 'Herbed goat cheese stuffing, local wildflower honey drizzle', price: 18, dietary: 'Vegetarian' },
           { name: 'Wagyu Smash Sliders (2)', description: 'Aged white cheddar, caramelized shallot aioli, house milk buns, duck fat fries', price: 23 }
@@ -61,7 +61,7 @@ export const diningOutlets: DiningOutlet[] = [
       {
         category: 'Craft Cocktails & Spritzes',
         items: [
-          { name: 'The Tangerine Spritz', description: 'Amaro Nonino, freshly pressed Valencia orange, prosecco, rosemary sprig', price: 19 },
+          { name: 'El Royale Hotel Spritz', description: 'Amaro Nonino, freshly pressed Valencia orange, prosecco, rosemary sprig', price: 19 },
           { name: 'NoHo Mezcalita', description: 'Siete Misterios Doba-Yej, charred pineapple shrub, lime, agave, sal de gusano', price: 20 },
           { name: 'California Olive Grove Martini', description: 'St. George Botanivore gin, vermouth blanc, Castelvetrano olive brine, citrus twist', price: 21 },
           { name: 'Canyon Hibiscus Zero-Proof Spritz', description: 'Wild hibiscus cordial, blood orange, clarified mint soda, lime wheel', price: 14, dietary: 'Non-Alcoholic' }
@@ -71,7 +71,7 @@ export const diningOutlets: DiningOutlet[] = [
   },
   {
     id: 'tangerine-pantry',
-    name: 'Tangerine Pantry & Espresso',
+    name: 'El Royale Pantry & Espresso',
     slug: 'tangerine-pantry-espresso',
     tagline: 'Specialty pour-overs, fresh morning pastries, and curated provisions',
     hours: 'Daily 6:30 AM – 4:00 PM',

@@ -695,7 +695,7 @@ export const BookingPage: React.FC = () => {
                     <ArrowRight className="w-4 h-4" />
                   </button>
                   <span className="text-[11px] text-muted text-center block mt-2">
-                    By confirming, you agree to The Tangerine stay policies and house rules.
+                    By confirming, you agree to El Royale Hotel stay policies and house rules.
                   </span>
                 </div>
               </div>
@@ -729,7 +729,7 @@ export const BookingPage: React.FC = () => {
                     Reservation Confirmed
                   </span>
                   <h1 className="font-serif text-3xl sm:text-4xl text-ink font-normal mt-1">
-                    We look forward to welcoming you to The Tangerine.
+                    We look forward to welcoming you to El Royale Hotel.
                   </h1>
                 </div>
 
@@ -752,7 +752,7 @@ export const BookingPage: React.FC = () => {
                   </button>
 
                   <a
-                    href={`data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Stay at The Tangerine Hotel%0ADESCRIPTION:${selectedUnit.name}%0ALOCATION:3901 W Riverside Dr, Burbank CA%0ADTSTART:${state.checkIn.replace(/-/g, '')}%0ADTEND:${state.checkOut.replace(/-/g, '')}%0AEND:VEVENT%0AEND:VCALENDAR`}
+                    href={`data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Stay at El Royale Hotel%0ADESCRIPTION:${selectedUnit.name}%0ALOCATION:3901 W Riverside Dr, Burbank CA%0ADTSTART:${state.checkIn.replace(/-/g, '')}%0ADTEND:${state.checkOut.replace(/-/g, '')}%0AEND:VEVENT%0AEND:VCALENDAR`}
                     download="tangerine-stay.ics"
                     className="flex items-center space-x-1.5 px-4 py-2 rounded-[2px] bg-canvas border border-hairline hover:border-brass text-ink"
                   >
@@ -819,7 +819,7 @@ export const BookingPage: React.FC = () => {
                 <div className="pt-4 border-t border-hairline space-y-2 text-xs font-mono">
                   <span className="uppercase text-muted font-sans font-medium block">Directions to Property:</span>
                   <p className="text-ink/80 font-sans leading-relaxed">
-                    The Tangerine is situated at 3901 W Riverside Dr, Burbank, CA 91505. Please pull into the gated motor court off Riverside Drive where our valet team will assist with luggage and vehicle placement.
+                    El Royale Hotel is situated at 3901 W Riverside Dr, Burbank, CA 91505. Please pull into the gated motor court off Riverside Drive where our valet team will assist with luggage and vehicle placement.
                   </p>
                 </div>
               </div>
@@ -827,7 +827,7 @@ export const BookingPage: React.FC = () => {
               {/* Navigation Back */}
               <div className="text-center pt-4">
                 <Link to="/" className="text-xs text-muted hover:text-ink underline">
-                  Return to The Tangerine home page →
+                  Return to El Royale Hotel home page →
                 </Link>
               </div>
 

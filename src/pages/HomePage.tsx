@@ -50,7 +50,7 @@ export const HomePage: React.FC = () => {
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2400&auto=format&fit=crop"
-            alt="The Tangerine Hotel & Resort grounds with shaded palms and architecture"
+            alt="El Royale Hotel & Resort grounds with shaded palms and architecture"
             className="w-full h-full object-cover brightness-[0.88] motion-safe:animate-in motion-safe:fade-in motion-safe:duration-1000"
           />
           {/* Soft bottom-to-top scrim for typography legibility */}
@@ -101,7 +101,7 @@ export const HomePage: React.FC = () => {
               Built as a mid-century California retreat and reimagined as an unhurried sanctuary. We invite guests to slow down between soundstage calls and canyon hikes.
             </h2>
             <p className="mt-6 text-base md:text-lg text-ink/80 leading-relaxed max-w-[68ch]">
-              Unlike typical Hollywood hotels that compete for noise, The Tangerine is defined by shade and quiet stone. Here, mornings begin with fresh Valencia oranges plucked from your villa courtyard, and afternoons drift alongside the 75-foot pool beneath Canary palms.
+              Unlike typical Hollywood hotels that compete for noise, El Royale Hotel is defined by shade and quiet stone. Here, mornings begin with fresh Valencia oranges plucked from your villa courtyard, and afternoons drift alongside the 75-foot pool beneath Canary palms.
             </p>
           </div>
 
@@ -497,7 +497,7 @@ export const HomePage: React.FC = () => {
               <Search className="w-4 h-4 text-water shrink-0 ml-1" />
               <input
                 type="text"
-                placeholder="Search places on map (e.g. Warner Bros, Universal, or The Tangerine)..."
+                placeholder="Search places on map (e.g. Warner Bros, Universal, or El Royale Hotel)..."
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     navigate(`/explore?q=${encodeURIComponent((e.target as HTMLInputElement).value)}`);
@@ -514,7 +514,7 @@ export const HomePage: React.FC = () => {
                 className="bg-brass text-white px-2.5 py-1 rounded-[3px] font-medium flex items-center gap-1 shrink-0"
               >
                 <Star className="w-3 h-3 fill-current" />
-                <span>The Tangerine (⭐ 4.9)</span>
+                <span>El Royale Hotel (⭐ 4.9)</span>
               </Link>
               <Link
                 to="/explore?q=Warner"
